@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ssuwap</string>
+    <string name="user1">강동민님의 2024-2학기 도서</string>
+    <string name="Upper_Book">Book</string>
+    <string name="Upper_Sellinglist">판매목록</string>
+    <string name="Upper_Buying">구매창</string>
+    <string name="exLongtext"> 그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요</string>
+</resources>
