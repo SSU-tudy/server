@@ -13,10 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="MainActivity">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="SellinglistAvtivity">
+      <SelectionState runConfigName="UploadBookFormat">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
