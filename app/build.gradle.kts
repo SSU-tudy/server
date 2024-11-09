@@ -35,6 +35,17 @@ android {
 }
 
 dependencies {
+    implementation(libs.glide)
+
+    // CameraX 라이브러리
+    implementation(libs.camerax.core)
+    implementation(libs.camerax.camera2)
+    implementation(libs.camerax.lifecycle)
+    implementation(libs.camerax.view)
+
+    // ML Kit 바코드 스캐너
+    implementation(libs.mlkit.barcode.scanning)
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
