@@ -1,13 +1,12 @@
 package com.example.ssuwap;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ssuwap.data.TagData;
 import com.example.ssuwap.databinding.TaglistBinding;
 
 import java.util.ArrayList;
