@@ -1,4 +1,4 @@
-package com.example.ssuwap;
+package com.example.ssuwap.ui.book;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ssuwap.databinding.ActivityMainBinding;
-import com.example.ssuwap.databinding.ItemListBinding;
+import com.example.ssuwap.data.MainData;
+import com.example.ssuwap.R;
 
 import java.util.ArrayList;
 

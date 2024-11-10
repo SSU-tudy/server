@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.example.ssuwap.databinding.ActivityUploadBookFormatBinding;
 
 public class UploadBookFormat extends AppCompatActivity {
-
     private ActivityUploadBookFormatBinding binding;
 
     private final ActivityResultLauncher<Intent> uploadBookLauncher = registerForActivityResult(

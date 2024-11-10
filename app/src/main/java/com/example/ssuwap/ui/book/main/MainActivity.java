@@ -1,20 +1,17 @@
-package com.example.ssuwap;
+package com.example.ssuwap.ui.book;
 
 import android.os.Bundle;
 import android.widget.ImageButton;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ssuwap.data.MainData;
+import com.example.ssuwap.R;
 import com.example.ssuwap.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 

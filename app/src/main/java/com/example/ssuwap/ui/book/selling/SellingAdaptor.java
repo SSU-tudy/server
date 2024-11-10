@@ -1,12 +1,12 @@
-package com.example.ssuwap;
+package com.example.ssuwap.ui.book;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ssuwap.data.SellingListData;
 import com.example.ssuwap.databinding.SellinglistBinding;
 
 import java.util.ArrayList;
