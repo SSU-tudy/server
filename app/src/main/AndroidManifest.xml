@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UploadBookScan"
+            android:name=".ui.book.upload.isbn.UploadBookScan"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UploadBookFormat"
+            android:name=".ui.book.upload.UploadBookFormat"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +47,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BuyingActivity"
+            android:name=".ui.book.buying.BuyingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,7 +56,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SellinglistAvtivity"
+            android:name=".ui.book.selling.SellinglistAvtivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,7 +65,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.book.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

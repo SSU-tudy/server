@@ -1,16 +1,12 @@
-package com.example.ssuwap;
+package com.example.ssuwap.ui.book.buying;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.widget.HorizontalScrollView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.ssuwap.data.TagData;
+import com.example.ssuwap.ui.book.TaglistAdaptor;
 import com.example.ssuwap.databinding.ActivityBuyingBinding;
 
 import java.util.ArrayList;

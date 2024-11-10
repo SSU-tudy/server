@@ -14,11 +14,23 @@
         android:layout_marginStart="10dp"
         android:text="@string/Upper_Sellinglist"
         android:gravity="center_vertical"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tagrv"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tagrv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
