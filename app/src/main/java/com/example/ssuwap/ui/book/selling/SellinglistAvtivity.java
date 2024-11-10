@@ -1,4 +1,4 @@
-package com.example.ssuwap.ui.book;
+package com.example.ssuwap.ui.book.selling;
 
 import android.os.Bundle;
 
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.ssuwap.R;
 import com.example.ssuwap.data.SellingListData;
 import com.example.ssuwap.data.TagData;
-import com.example.ssuwap.TaglistAdaptor;
+import com.example.ssuwap.ui.book.TaglistAdaptor;
 import com.example.ssuwap.databinding.ActivitySellinglistAvtivityBinding;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.ssuwap.ui.book;
+package com.example.ssuwap.ui.book.main;
 
 import android.view.LayoutInflater;
 import android.view.View;

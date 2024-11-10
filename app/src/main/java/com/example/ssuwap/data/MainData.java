@@ -1,4 +1,4 @@
-package com.example.ssuwap;
+package com.example.ssuwap.data;
 
 public class MainData {
     private int iv_book;
