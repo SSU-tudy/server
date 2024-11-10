@@ -1,5 +1,6 @@
 package com.example.ssuwap;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,6 +21,32 @@ import com.example.ssuwap.databinding.ActivityUploadBookFormatBinding;
 public class UploadBookFormat extends AppCompatActivity {
 
     private ActivityUploadBookFormatBinding binding;
+    private AlertDialog gradesDialog;
+    private AlertDialog termsDialog;
+    private AlertDialog subjectDialog;
+
+    private DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if(dialog == gradesDialog){
+                String[] data = getResources().getStringArray(R.array.grades);
+                binding.selectGrades.setText(data[which]);
+                dialog.dismiss();
+            }
+
+            else if(dialog == termsDialog) {
+                String[] data = getResources().getStringArray(R.array.term);
+                binding.selectTerm.setText(data[which]);
+                dialog.dismiss();
+            }
+
+            else if(dialog == subjectDialog){
+                String[] data = getResources().getStringArray(R.array.subject);
+                binding.selectSubject.setText(data[which]);
+                dialog.dismiss();
+            }
+        }
+    };
 
     private final ActivityResultLauncher<Intent> uploadBookLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -44,6 +72,30 @@ public class UploadBookFormat extends AppCompatActivity {
                 Intent intent = new Intent(UploadBookFormat.this, UploadBookScan.class);
                 uploadBookLauncher.launch(intent);
             }
+        });
+
+        binding.selectGrades.setOnClickListener(view -> {
+            gradesDialog = new AlertDialog.Builder(this)
+                    .setTitle("학년을 선택하세요.")
+                    .setSingleChoiceItems(R.array.grades, 0, dialogListener)
+                    .create();
+            gradesDialog.show();
+        });
+
+        binding.selectTerm.setOnClickListener(view -> {
+            termsDialog = new AlertDialog.Builder(this)
+                    .setTitle("학기를 선택하세요.")
+                    .setSingleChoiceItems(R.array.term, 0, dialogListener)
+                    .create();
+            termsDialog.show();
+        });
+
+        binding.selectSubject.setOnClickListener(view -> {
+            subjectDialog = new AlertDialog.Builder(this)
+                    .setTitle("과목을 선택하세요.")
+                    .setSingleChoiceItems(R.array.subject, 0, dialogListener)
+                    .create();
+            subjectDialog.show();
         });
     }
 

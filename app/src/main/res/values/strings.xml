@@ -5,4 +5,25 @@
     <string name="Upper_Sellinglist">판매목록</string>
     <string name="Upper_Buying">구매창</string>
     <string name="exLongtext"> 그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요</string>
+
+    <string-array name="grades">
+        <item>1학년</item>
+        <item>2학년</item>
+        <item>3학년</item>
+        <item>4학년</item>
+    </string-array>
+
+    <string-array name="term">
+        <item>1학기</item>
+        <item>2학기</item>
+    </string-array>
+
+    <string-array name="subject">
+        <item>사용자인터페이스및실습</item>
+        <item>컴퓨터구조</item>
+        <item>컴퓨터네트워크</item>
+        <item>데이터분석및실습</item>
+        <item>알고리즘</item>
+    </string-array>
+
 </resources>
