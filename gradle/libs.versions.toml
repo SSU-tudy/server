@@ -15,6 +15,9 @@ camerax-camera2 = "1.1.0"
 camerax-lifecycle = "1.1.0"
 camerax-view = "1.1.0"
 glide = "4.12.0"
+googleGmsGoogleServices = "4.4.2"
+firebaseAuth = "23.1.0"
+firebaseDatabase = "21.0.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -32,8 +35,11 @@ camerax-camera2 = { group = "androidx.camera", name = "camera-camera2", version.
 camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax-lifecycle" }
 camerax-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax-view" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
