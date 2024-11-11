@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -13,15 +14,30 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.ssuwap.R;
+import com.example.ssuwap.data.BookInfoData;
 import com.example.ssuwap.databinding.ActivityUploadBookFormatBinding;
 import com.example.ssuwap.ui.book.upload.isbn.NaverBookInfoFetcher;
 import com.example.ssuwap.ui.book.upload.isbn.UploadBookScan;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.UUID;
 
 public class UploadBookFormat extends AppCompatActivity {
     private ActivityUploadBookFormatBinding binding;
     private AlertDialog gradesDialog;
     private AlertDialog termsDialog;
     private AlertDialog subjectDialog;
+
+    private String titleBook;
+    private String authorBook;
+    private String pulisherBook;
+    private String imageUrlBook;
+    private int timeUpload;
+
+    private FirebaseAuth mFirebaseAuth;     // FB 인증
+    private DatabaseReference mDatabaseRef;
 
     private DialogInterface.OnClickListener dialogListener = new DialogInterface.OnClickListener() {
         @Override
@@ -95,12 +111,36 @@ public class UploadBookFormat extends AppCompatActivity {
                     .create();
             subjectDialog.show();
         });
+
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("BookInfo");
+        binding.uploadBookButton.setOnClickListener(view -> {
+
+            String price = binding.bookPrice.getText().toString();
+            String grade = binding.selectGrades.getText().toString();
+            String subject = binding.selectSubject.getText().toString();
+            String semester = binding.selectTerm.getText().toString();
+            String description = binding.detailInfoBook.getText().toString();
+
+            BookInfoData book = new BookInfoData(titleBook, imageUrlBook,pulisherBook, authorBook,
+                    grade, semester, price, subject, description);
+
+            mDatabaseRef.push().child(UUID.randomUUID().toString()).setValue(book)
+                    .addOnSuccessListener(aVoid -> Toast.makeText(this, "업로드 성공", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(this, "업로드 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        });
     }
 
     private void fetchAndDisplayBookInfoNaver(String isbn) {
         NaverBookInfoFetcher fetcher = new NaverBookInfoFetcher(new NaverBookInfoFetcher.OnBookInfoFetchedListener() {
             @Override
             public void onBookInfoFetched(String title, String authors, String publisher, String publishedDate, String imageUrl) {
+                titleBook = title;
+                authorBook = authors;
+                pulisherBook = publisher;
+                imageUrlBook = imageUrl;
+
                 binding.titleTextView.setText("제목: " + title);
                 binding.authorsTextView.setText("저자: " + authors);
                 binding.publisherTextView.setText("출판사: " + publisher);

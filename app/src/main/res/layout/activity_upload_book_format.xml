@@ -5,16 +5,21 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.book.upload.UploadBookFormat">
+    tools:context=".ui.book.upload.UploadBookFormat"
+    >
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginStart="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="10dp"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         >
 
         <RelativeLayout
@@ -29,6 +34,8 @@
                 android:id = "@+id/upload_bookimage"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
+                android:src="@drawable/samplebook"
+                android:padding="10dp"
                 />
 
             <LinearLayout
@@ -118,6 +125,7 @@
             android:layout_height="50dp"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/bookPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="가격 : "
@@ -139,11 +147,21 @@
                 android:text="설명"/>
 
             <EditText
+                android:id="@+id/detailInfoBook"
                 android:layout_width="match_parent"
-                android:layout_height="230dp"
+                android:layout_height="200dp"
                 android:hint="추가 정보를 입력하세요."
-                android:gravity="left|top"/>
+                android:gravity="start|top"/>
+
         </LinearLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/uploadBookButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_margin="4dp"
+            android:text="올리기"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
