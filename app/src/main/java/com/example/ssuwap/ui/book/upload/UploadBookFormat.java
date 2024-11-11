@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.ssuwap.R;
 import com.example.ssuwap.databinding.ActivityUploadBookFormatBinding;
 import com.example.ssuwap.ui.book.upload.isbn.NaverBookInfoFetcher;
 import com.example.ssuwap.ui.book.upload.isbn.UploadBookScan;
