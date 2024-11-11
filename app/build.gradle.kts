@@ -47,6 +47,10 @@ dependencies {
     // ML Kit 바코드 스캐너
     implementation(libs.mlkit.barcode.scanning)
 
+    // image 불러오기
+    implementation("com.github.bumptech.glide:glide:4.15.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.0")
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
