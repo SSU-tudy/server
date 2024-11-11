@@ -5,16 +5,21 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.book.upload.UploadBookFormat">
+    tools:context=".ui.book.upload.UploadBookFormat"
+    >
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginStart="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="10dp"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         >
 
         <RelativeLayout
@@ -22,13 +27,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-
+            android:layout_marginBottom="15dp"
             >
 
             <ImageView
                 android:id = "@+id/upload_bookimage"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
+                android:src="@drawable/samplebook"
+                android:padding="10dp"
                 />
 
             <LinearLayout
@@ -45,9 +52,9 @@
 
                 <Button
                     android:id="@+id/scanBookButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
-                    android:text = "ISBN 스캔"
+                    android:background="@drawable/barcode"
                     android:layout_marginBottom="10dp"
                     />
 
@@ -86,29 +93,75 @@
 
         </RelativeLayout>
 
-        <EditText
-
+        <TextView
+            android:id="@+id/selectGrades"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="  학과(부) :"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="클릭하여 학년을 선택하세요."
+            android:gravity="center_vertical"
             />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="        학기 :"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="    과목명 :"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="       가격 :"/>
 
-        <EditText
+        <TextView
+            android:id="@+id/selectTerm"
             android:layout_width="match_parent"
-            android:layout_height="270dp"
-            android:hint="       설명 :"
-            android:gravity="left|top"/>
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="클릭하여 학기를 선택하세요."
+            android:gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/selectSubject"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="클릭하여 과목을 선택하세요."
+            android:gravity="center_vertical"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/bookPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="가격 : "
+                android:gravity = "center"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="설명"/>
+
+            <EditText
+                android:id="@+id/detailInfoBook"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:hint="추가 정보를 입력하세요."
+                android:gravity="start|top"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/uploadBookButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_margin="4dp"
+            android:text="올리기"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
