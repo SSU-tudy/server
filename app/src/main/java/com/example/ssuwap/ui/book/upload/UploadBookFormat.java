@@ -75,10 +75,12 @@ public class UploadBookFormat extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("UploadBookFormat", "excute check");
         super.onCreate(savedInstanceState);
         binding = ActivityUploadBookFormatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        if(binding == null) Log.d("UploadBookFormat", "binding fail");
+        Log.d("UploadBookFormat", "binding check");
         binding.scanBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

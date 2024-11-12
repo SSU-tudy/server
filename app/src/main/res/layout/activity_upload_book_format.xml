@@ -34,7 +34,7 @@
                 android:id = "@+id/upload_bookimage"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:src="@drawable/samplebook"
+                android:src="@drawable/booksample"
                 android:padding="10dp"
                 />
 
