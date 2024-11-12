@@ -11,11 +11,11 @@ public class BookInfo {
     public String tag_grade;
     public String tag_semester;
     public String tag_subject;
-    public int price;
+    public String price;
     public int time;
 
     public BookInfo() { }
-    public BookInfo(String title, String imageUrl, String author, String publisher, String description, String tag_grade, String tag_semester, String tag_subject, int price, int time) {
+    public BookInfo(String title, String imageUrl, String author, String publisher, String description, String tag_grade, String tag_semester, String tag_subject, String price, int time) {
         this.author = author;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -40,7 +40,7 @@ public class BookInfo {
     public String getPublisher() {
         return publisher;
     }
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
     public String getTag_grade() {
@@ -68,7 +68,7 @@ public class BookInfo {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
     public void setTag_grade(String tag_grade) {

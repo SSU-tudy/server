@@ -1,7 +1,9 @@
 package com.example.ssuwap.ui.book.selling;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.ActivitySellinglistAvtivityBinding;
+import com.example.ssuwap.ui.book.upload.UploadBookFormat;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,6 +58,7 @@ public class SellinglistActivity extends AppCompatActivity{
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     BookInfo bookInfo = snapshot.getValue(BookInfo.class);
                     if (bookInfo != null) {
+                        Log.d("SellinglistActivity", "dataLoad");
                         arrayList.add(bookInfo);
                     }
                 }
@@ -65,6 +69,14 @@ public class SellinglistActivity extends AppCompatActivity{
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("SellinglistActivity", "Firebase error: " + error.toException());
+            }
+        });
+
+        binding.sellingbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SellinglistActivity.this, UploadBookFormat.class));
+
             }
         });
     }

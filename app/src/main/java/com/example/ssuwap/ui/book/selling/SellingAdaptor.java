@@ -38,9 +38,9 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
     public void onBindViewHolder(@NonNull SellingViewHolder holder, int position) {
         Glide.with(holder.itemView)
                 .load(arrayList.get(position).getImageUrl())
-                .into(holder.binding.ivBook);
-        holder.binding.price.setText(String.valueOf(arrayList.get(position).getPrice()));
-        holder.binding.title.setText(arrayList.get(position).getTitle());
+                .into(holder.binding.ivBook); Log.d("SellingAdaptor", "image check");
+        holder.binding.price.setText(arrayList.get(position).getPrice()); Log.d("SellingAdaptor", "price check" + arrayList.get(position).getPrice());
+        holder.binding.title.setText(arrayList.get(position).getTitle()); Log.d("SellingAdaptor", "title check");
         holder.binding.time.setText(String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) - arrayList.get(position).getTime()));  // 시간 계산 후 String으로 변환
         holder.binding.chatnum.setText(String.valueOf(chatNum));
     }
