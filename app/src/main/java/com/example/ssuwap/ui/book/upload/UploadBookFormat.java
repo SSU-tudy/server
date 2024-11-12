@@ -128,7 +128,7 @@ public class UploadBookFormat extends AppCompatActivity {
             String subject = binding.selectSubject.getText().toString(); Log.d("UploadBookFormatCheck", subject);
             String semester = binding.selectTerm.getText().toString(); Log.d("UploadBookFormatCheck", semester);
             String description = binding.detailInfoBook.getText().toString(); Log.d("UploadBookFormatCheck", description);
-            int time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            long time = System.currentTimeMillis();
 
             BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price, time);
             mDatabaseRef.push().setValue(book)
