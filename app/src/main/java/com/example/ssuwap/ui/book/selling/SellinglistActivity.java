@@ -1,21 +1,18 @@
 package com.example.ssuwap.ui.book.selling;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.TaskStackBuilder;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ssuwap.R;
 import com.example.ssuwap.data.SellingListData;
-import com.example.ssuwap.data.TagData;
-import com.example.ssuwap.databinding.ActivityBuyingBinding;
-import com.example.ssuwap.ui.book.TaglistAdaptor;
 import com.example.ssuwap.databinding.ActivitySellinglistAvtivityBinding;
-import com.google.firebase.Firebase;
+import com.example.ssuwap.ui.book.upload.UploadBookFormat;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -67,5 +64,14 @@ public class SellinglistActivity extends AppCompatActivity{
 
         adapter = new SellingAdaptor(arrayList, this);
         recyclerView.setAdapter(adapter);
+
+
+        binding.sellingbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SellinglistActivity.this, UploadBookFormat.class));
+
+            }
+        });
     }
 }
