@@ -8,7 +8,7 @@ public class MainData {
         this.iv_book = iv_book;
         this.tv_book = tv_book;
     }
-
+    public int gesdf(){return 3;}
     public int getIv_book() {
         return iv_book;
     }
