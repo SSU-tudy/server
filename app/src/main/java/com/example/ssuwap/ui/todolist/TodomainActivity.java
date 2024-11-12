@@ -20,9 +20,11 @@ public class TodomainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityTodomainBinding binding = ActivityTodomainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
     }
     private int studyMinutes = 0;  // 누적된 공부 시간
 
+    //하이라이트 함수
     private void recordStudyTime(int minutes) {
         studyMinutes += minutes;
         int hourIndex = studyMinutes / 60;  // 시간대
@@ -34,7 +36,7 @@ public class TodomainActivity extends AppCompatActivity {
             TextView blockView = findViewById(resId);
 
             if (blockView != null) {
-                blockView.setBackgroundColor(ContextCompat.getColor(this, R.color.study_highlight));
+                blockView.setBackgroundColor(ContextCompat.getColor(this, R.color.test));
             }
         }
     }
