@@ -1,4 +1,4 @@
-package com.example.ssuwap.data;
+package com.example.ssuwap.data.book;
 
 public class SellingListData {
     private String tv_title;

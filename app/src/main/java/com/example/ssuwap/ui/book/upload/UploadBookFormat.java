@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.ssuwap.R;
-import com.example.ssuwap.data.BookInfoData;
+import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.ActivityUploadBookFormatBinding;
 import com.example.ssuwap.ui.book.upload.isbn.NaverBookInfoFetcher;
 import com.example.ssuwap.ui.book.upload.isbn.UploadBookScan;
@@ -32,7 +32,7 @@ public class UploadBookFormat extends AppCompatActivity {
 
     private String titleBook;
     private String authorBook;
-    private String pulisherBook;
+    private String publisherBook;
     private String imageUrlBook;
     private int timeUpload;
 
@@ -116,16 +116,13 @@ public class UploadBookFormat extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("BookInfo");
         binding.uploadBookButton.setOnClickListener(view -> {
-
-            String price = binding.bookPrice.getText().toString();
+            int price = Integer.parseInt(binding.bookPrice.getText().toString());
             String grade = binding.selectGrades.getText().toString();
             String subject = binding.selectSubject.getText().toString();
             String semester = binding.selectTerm.getText().toString();
             String description = binding.detailInfoBook.getText().toString();
 
-            BookInfoData book = new BookInfoData(titleBook, imageUrlBook,pulisherBook, authorBook,
-                    grade, semester, price, subject, description);
-
+            BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price);
             mDatabaseRef.push().child(UUID.randomUUID().toString()).setValue(book)
                     .addOnSuccessListener(aVoid -> Toast.makeText(this, "업로드 성공", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> Toast.makeText(this, "업로드 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
@@ -138,7 +135,7 @@ public class UploadBookFormat extends AppCompatActivity {
             public void onBookInfoFetched(String title, String authors, String publisher, String publishedDate, String imageUrl) {
                 titleBook = title;
                 authorBook = authors;
-                pulisherBook = publisher;
+                publisherBook = publisher;
                 imageUrlBook = imageUrl;
 
                 binding.titleTextView.setText("제목: " + title);

@@ -5,17 +5,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.TaskStackBuilder;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ssuwap.R;
-import com.example.ssuwap.data.SellingListData;
-import com.example.ssuwap.data.TagData;
-import com.example.ssuwap.databinding.ActivityBuyingBinding;
-import com.example.ssuwap.ui.book.TaglistAdaptor;
+import com.example.ssuwap.data.book.SellingListData;
 import com.example.ssuwap.databinding.ActivitySellinglistAvtivityBinding;
-import com.google.firebase.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
