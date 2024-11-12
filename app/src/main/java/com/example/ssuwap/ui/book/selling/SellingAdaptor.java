@@ -1,6 +1,7 @@
 package com.example.ssuwap.ui.book.selling;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -19,8 +20,7 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
 
     private ArrayList<BookInfo> arrayList;
     private Context context;
-    private int chatNum;
-    private int elapsedHours;
+    private int chatNum = 1000;
 
     public SellingAdaptor(ArrayList<BookInfo> arrayList, Context context) {
         this.arrayList = arrayList;
@@ -35,15 +35,14 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SellingAdaptor.SellingViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SellingViewHolder holder, int position) {
         Glide.with(holder.itemView)
                 .load(arrayList.get(position).getImageUrl())
                 .into(holder.binding.ivBook);
-        holder.binding.price.setText(arrayList.get(position).getPrice());
+        holder.binding.price.setText(String.valueOf(arrayList.get(position).getPrice()));
         holder.binding.title.setText(arrayList.get(position).getTitle());
-        // chatting 수 어떻게 구하지..
-        holder.binding.chatnum.setText(chatNum);
-        holder.binding.time.setText(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) - arrayList.get(position).getTime());
+        holder.binding.time.setText(String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) - arrayList.get(position).getTime()));  // 시간 계산 후 String으로 변환
+        holder.binding.chatnum.setText(String.valueOf(chatNum));
     }
 
     @Override

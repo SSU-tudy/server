@@ -28,7 +28,7 @@ public class SellinglistActivity extends AppCompatActivity{
     private DatabaseReference databaseReference;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivitySellinglistAvtivityBinding binding = ActivitySellinglistAvtivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -37,29 +37,35 @@ public class SellinglistActivity extends AppCompatActivity{
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
         arrayList = new ArrayList<>();
 
+        // 어댑터 초기화 및 연결
+        adapter = new SellingAdaptor(arrayList, SellinglistActivity.this);
+        recyclerView.setAdapter(adapter);
+        Log.d("SellinglistActivity", "Adapter attached to RecyclerView");
+
+        // Firebase 데이터 로드
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("SellingListData");
+        databaseReference = database.getReference("BookInfo");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     BookInfo bookInfo = snapshot.getValue(BookInfo.class);
-                    arrayList.add(bookInfo);
+                    if (bookInfo != null) {
+                        arrayList.add(bookInfo);
+                    }
                 }
-                adapter.notifyDataSetChanged();  // 어댑터에 데이터 변경 알림
+                Log.d("SellinglistActivity", "Data loaded from Firebase, arrayList size: " + arrayList.size());
+                adapter.notifyDataSetChanged();  // 데이터 변경 알림
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // DB 가져오다가 에러..
-                Log.e("SellingActivity", String.valueOf(error.toException()));
+                Log.e("SellinglistActivity", "Firebase error: " + error.toException());
             }
         });
-
-        adapter = new SellingAdaptor(arrayList, this);
-        recyclerView.setAdapter(adapter);
     }
 }
