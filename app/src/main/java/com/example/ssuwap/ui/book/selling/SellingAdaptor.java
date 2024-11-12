@@ -33,6 +33,7 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
 
     @Override
     public void onBindViewHolder(@NonNull SellingAdaptor.SellingViewHolder holder, int position) {
+        // image
         Glide.with(holder.itemView)
                 .load(arrayList.get(position).getIv_book())
                 .into(holder.binding.ivBook);
