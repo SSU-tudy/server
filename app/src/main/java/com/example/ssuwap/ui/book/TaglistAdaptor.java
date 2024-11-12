@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ssuwap.data.TagData;
+import com.example.ssuwap.data.tag.TagData;
 import com.example.ssuwap.databinding.TaglistBinding;
 
 import java.util.ArrayList;

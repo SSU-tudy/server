@@ -1,4 +1,4 @@
-package com.example.ssuwap.data;
+package com.example.ssuwap.data.tag;
 
 public class TagData {
     private String tagname;
