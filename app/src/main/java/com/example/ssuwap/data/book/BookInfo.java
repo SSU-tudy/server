@@ -1,5 +1,7 @@
 package com.example.ssuwap.data.book;
 
+import java.util.Date;
+
 public class BookInfo {
     public String title;
     public String imageUrl;
@@ -10,9 +12,10 @@ public class BookInfo {
     public String tag_semester;
     public String tag_subject;
     public int price;
+    public int time;
 
     public BookInfo() { }
-    public BookInfo(String title, String imageUrl, String author, String publisher, String description, String tag_grade, String tag_semester, String tag_subject, int price) {
+    public BookInfo(String title, String imageUrl, String author, String publisher, String description, String tag_grade, String tag_semester, String tag_subject, int price, int time) {
         this.author = author;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -22,6 +25,7 @@ public class BookInfo {
         this.tag_grade = tag_grade;
         this.tag_subject = tag_subject;
         this.title = title;
+        this.time = time;
     }
 
     public String getAuthor() {
@@ -51,6 +55,9 @@ public class BookInfo {
     public String getTitle() {
         return title;
     }
+    public int getTime() {
+        return time;
+    }
 
     public void setAuthor(String author) {
         this.author = author;
@@ -79,4 +86,5 @@ public class BookInfo {
     public void setTitle(String title) {
         this.title = title;
     }
+    public void setTime(int time) { this.time = time; }
 }

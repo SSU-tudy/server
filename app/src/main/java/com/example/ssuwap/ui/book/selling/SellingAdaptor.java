@@ -8,17 +8,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.ssuwap.data.book.SellingListData;
+import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.SellinglistBinding;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingViewHolder>{
 
-    private ArrayList<SellingListData> arrayList;
+    private ArrayList<BookInfo> arrayList;
     private Context context;
+    private int chatNum;
+    private int elapsedHours;
 
-    public SellingAdaptor(ArrayList<SellingListData> arrayList, Context context) {
+    public SellingAdaptor(ArrayList<BookInfo> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
     }
@@ -33,12 +37,13 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
     @Override
     public void onBindViewHolder(@NonNull SellingAdaptor.SellingViewHolder holder, int position) {
         Glide.with(holder.itemView)
-                .load(arrayList.get(position).getIv_book())
+                .load(arrayList.get(position).getImageUrl())
                 .into(holder.binding.ivBook);
-        holder.binding.price.setText(arrayList.get(position).getTv_price());
-        holder.binding.title.setText(arrayList.get(position).getTv_title());
-        holder.binding.time.setText(arrayList.get(position).getTv_time());
-        holder.binding.chatnum.setText(arrayList.get(position).getTv_chatnum());
+        holder.binding.price.setText(arrayList.get(position).getPrice());
+        holder.binding.title.setText(arrayList.get(position).getTitle());
+        // chatting 수 어떻게 구하지..
+        holder.binding.chatnum.setText(chatNum);
+        holder.binding.time.setText(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) - arrayList.get(position).getTime());
     }
 
     @Override

@@ -22,6 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 public class UploadBookFormat extends AppCompatActivity {
@@ -123,8 +126,9 @@ public class UploadBookFormat extends AppCompatActivity {
             String subject = binding.selectSubject.getText().toString();
             String semester = binding.selectTerm.getText().toString();
             String description = binding.detailInfoBook.getText().toString();
+            int time = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 
-            BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price);
+            BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price, time);
             mDatabaseRef.push().child(UUID.randomUUID().toString()).setValue(book)
                     .addOnSuccessListener(aVoid -> Toast.makeText(this, "업로드 성공", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> Toast.makeText(this, "업로드 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ssuwap.data.book.SellingListData;
+import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.ActivitySellinglistAvtivityBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +23,7 @@ public class SellinglistActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<SellingListData> arrayList;
+    private ArrayList<BookInfo> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
@@ -46,7 +46,7 @@ public class SellinglistActivity extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    SellingListData bookInfo = snapshot.getValue(SellingListData.class);
+                    BookInfo bookInfo = snapshot.getValue(BookInfo.class);
                     arrayList.add(bookInfo);
                 }
                 adapter.notifyDataSetChanged();  // 어댑터에 데이터 변경 알림
