@@ -19,6 +19,6 @@ public class MainPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainPostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        // hey
+        // hey o
     }
 }
