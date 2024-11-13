@@ -75,8 +75,8 @@ public class SellinglistActivity extends AppCompatActivity{
         binding.sellingbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // 판매하러가기 실행
                 startActivity(new Intent(SellinglistActivity.this, UploadBookFormat.class));
-
             }
         });
     }

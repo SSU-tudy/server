@@ -12,10 +12,10 @@ public class BookInfo {
     public String tag_semester;
     public String tag_subject;
     public String price;
-    public int time;
+    public long time;
 
     public BookInfo() { }
-    public BookInfo(String title, String imageUrl, String author, String publisher, String description, String tag_grade, String tag_semester, String tag_subject, String price, int time) {
+    public BookInfo(String title, String imageUrl, String author, String publisher, String description, String tag_grade, String tag_semester, String tag_subject, String price, long time) {
         this.author = author;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -55,7 +55,7 @@ public class BookInfo {
     public String getTitle() {
         return title;
     }
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
@@ -86,5 +86,5 @@ public class BookInfo {
     public void setTitle(String title) {
         this.title = title;
     }
-    public void setTime(int time) { this.time = time; }
+    public void setTime(long time) { this.time = time; }
 }

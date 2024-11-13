@@ -41,8 +41,11 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
                 .into(holder.binding.ivBook); Log.d("SellingAdaptor", "image check");
         holder.binding.price.setText(arrayList.get(position).getPrice()); Log.d("SellingAdaptor", "price check" + arrayList.get(position).getPrice());
         holder.binding.title.setText(arrayList.get(position).getTitle()); Log.d("SellingAdaptor", "title check");
-        holder.binding.time.setText(String.valueOf(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) - arrayList.get(position).getTime()));  // 시간 계산 후 String으로 변환
         holder.binding.chatnum.setText(String.valueOf(chatNum));
+
+        long elapsedTime = (System.currentTimeMillis() - arrayList.get(position).getTime()) / (1000 * 60 * 60);
+        if (elapsedTime < 24) holder.binding.time.setText(String.format("%d시간 전", elapsedTime));
+        else holder.binding.time.setText(String.format("%d일 전", elapsedTime/24));
     }
 
     @Override
