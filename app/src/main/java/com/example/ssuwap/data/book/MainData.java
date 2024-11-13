@@ -1,4 +1,4 @@
-package com.example.ssuwap.data;
+package com.example.ssuwap.data.book;
 
 public class MainData {
     private int iv_book;
@@ -8,7 +8,6 @@ public class MainData {
         this.iv_book = iv_book;
         this.tv_book = tv_book;
     }
-
     public int getIv_book() {
         return iv_book;
     }

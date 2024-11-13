@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ssuwap.data.MainData;
+import com.example.ssuwap.data.book.MainData;
 import com.example.ssuwap.R;
 import com.example.ssuwap.databinding.ActivityMainBinding;
 

@@ -1,4 +1,4 @@
-package com.example.ssuwap.data;
+package com.example.ssuwap.data.user;
 
 /* 사용자 계정 정보 모델 */
 public class UserAccount {

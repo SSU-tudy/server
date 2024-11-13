@@ -1,25 +1,28 @@
 package com.example.ssuwap.ui.book.selling;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.ssuwap.data.SellingListData;
+import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.SellinglistBinding;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingViewHolder>{
 
-    private ArrayList<SellingListData> arrayList;
+    private ArrayList<BookInfo> arrayList;
     private Context context;
+    private int chatNum = 1000;
 
-    public SellingAdaptor(ArrayList<SellingListData> arrayList, Context context) {
+    public SellingAdaptor(ArrayList<BookInfo> arrayList, Context context) {
         this.arrayList = arrayList;
         this.context = context;
     }
@@ -32,14 +35,17 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SellingAdaptor.SellingViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SellingViewHolder holder, int position) {
         Glide.with(holder.itemView)
-                .load(arrayList.get(position).getIv_book())
-                .into(holder.binding.ivBook);
-        holder.binding.price.setText(arrayList.get(position).getTv_price());
-        holder.binding.title.setText(arrayList.get(position).getTv_title());
-        holder.binding.time.setText(arrayList.get(position).getTv_time());
-        holder.binding.chatnum.setText(arrayList.get(position).getTv_chatnum());
+                .load(arrayList.get(position).getImageUrl())
+                .into(holder.binding.ivBook); Log.d("SellingAdaptor", "image check");
+        holder.binding.price.setText(arrayList.get(position).getPrice()); Log.d("SellingAdaptor", "price check" + arrayList.get(position).getPrice());
+        holder.binding.title.setText(arrayList.get(position).getTitle()); Log.d("SellingAdaptor", "title check");
+        holder.binding.chatnum.setText(String.valueOf(chatNum));
+
+        long elapsedTime = (System.currentTimeMillis() - arrayList.get(position).getTime()) / (1000 * 60 * 60);
+        if (elapsedTime < 24) holder.binding.time.setText(String.format("%d시간 전", elapsedTime));
+        else holder.binding.time.setText(String.format("%d일 전", elapsedTime/24));
     }
 
     @Override
