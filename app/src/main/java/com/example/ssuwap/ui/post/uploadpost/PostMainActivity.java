@@ -1,7 +1,9 @@
 package com.example.ssuwap.ui.post.uploadpost;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -13,15 +15,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.ssuwap.R;
 import com.example.ssuwap.data.book.BookInfo;
+import com.example.ssuwap.data.post.CommentInfo;
 import com.example.ssuwap.data.post.PostInfo;
 import com.example.ssuwap.databinding.ActivityPostMainBinding;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class PostMainActivity extends AppCompatActivity {
     ArrayList<PostInfo> list;
@@ -33,6 +38,7 @@ public class PostMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("PostMainActivity", "onCreate()");
         super.onCreate(savedInstanceState);
         binding = ActivityPostMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -48,19 +54,38 @@ public class PostMainActivity extends AppCompatActivity {
         binding.postRV.setAdapter(postAdaptor);  // 어댑터 설정
 
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
+        databaseReference.addValueEventListener(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list.clear();
+                list.clear(); // 기존 데이터 초기화
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    PostInfo postInfo = snapshot.getValue(PostInfo.class);
-                    if (postInfo != null) {
-                        Log.d("PostMainActivity", "dataLoad : "+postInfo.getDescription());
-                        list.add(postInfo);
-                    }
-                    postAdaptor.notifyDataSetChanged();
-                }
+                    try {
+                        // PostInfo 객체 생성
+                        PostInfo postInfo = snapshot.getValue(PostInfo.class);
 
+                        if (postInfo != null) {
+                            // comments 필드를 ArrayList로 변환
+                            ArrayList<CommentInfo> commentsList = new ArrayList<>();
+                            Map<String, CommentInfo> commentsMap = postInfo.getComments();
+                            if (commentsMap != null) {
+                                commentsList.addAll(commentsMap.values());
+                            }
+
+                            // 변환된 commentsList를 postInfo 객체에 설정
+                            postInfo.setCommentsList(commentsList);
+
+                            // 게시물 정보를 리스트에 추가
+                            Log.d("PostMainActivity", "dataLoad : " + postInfo.getDescription());
+                            list.add(postInfo);
+                        } else {
+                            Log.e("PostMainActivity", "Null PostInfo detected");
+                        }
+
+                    } catch (DatabaseException e) {
+                        Log.e("PostMainActivity", "Error loading data: " + e.getMessage(), e);
+                    }
+                }
+                // 데이터 로드 후 어댑터 갱신
+                postAdaptor.notifyDataSetChanged();
             }
 
             @Override
@@ -68,14 +93,5 @@ public class PostMainActivity extends AppCompatActivity {
                 Log.e("PostMainActivity", "Firebase error: " + error.toException());
             }
         });
-
-
-        if (list == null) {
-            Log.d("PostAdaptor", "List is null");
-        } else if (list.isEmpty()) {
-            Log.d("PostAdaptor", "List is empty");
-        } else {
-            Log.d("PostAdaptor", "List size: " + list.size());
-        }
     }
 }

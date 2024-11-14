@@ -1,6 +1,7 @@
 package com.example.ssuwap.ui.post.uploadpost;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +44,15 @@ public class PostAdaptor extends RecyclerView.Adapter<PostAdaptor.PostViewHolder
         holder.binding.postText.setText(postInfo.getDescription());
         Log.d("PostAdaptor", "image check : " + postInfo.getImageUrl());
         Log.d("PostAdaptor", "post check : " + postInfo.getDescription());
+
+        holder.binding.postView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PostViewActivity.class);
+                intent.putExtra("PostData", postInfo);
+                context.startActivity(intent);
+            }
+        });
 
     }
 
