@@ -1,45 +1,35 @@
-package com.example.ssuwap.ui.post.uploadpost;
-
-import static java.util.Collections.rotate;
+package com.example.ssuwap.ui.post.uploadpost.comment;
 
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.exifinterface.media.ExifInterface;
 
-import com.bumptech.glide.Glide;
 import com.example.ssuwap.R;
+import com.example.ssuwap.data.post.CommentInfo;
 import com.example.ssuwap.data.post.PostInfo;
-import com.example.ssuwap.databinding.ActivityUploadPostFormatBinding;
-import com.example.ssuwap.ui.book.upload.isbn.UploadBookScan;
-import com.google.common.util.concurrent.ListenableFuture;
+import com.example.ssuwap.databinding.ActivityUploadCommentFormatBinding;
+import com.example.ssuwap.ui.post.uploadpost.UploadPostFormat;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -48,21 +38,18 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 
-public class UploadPostFormat extends AppCompatActivity {
+public class UploadCommentFormat extends AppCompatActivity {
 
-    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    ActivityUploadCommentFormatBinding binding;
+
+    private static final String TAG = "UploadCommentFormat";
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private Uri photoUri;
     private String photoURL;
     private Bitmap imageBitmap;
-
-    private ActivityUploadPostFormatBinding binding;
 
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -70,12 +57,12 @@ public class UploadPostFormat extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult o) {
                     if(o.getResultCode() == Activity.RESULT_OK){
-                        Log.d("UploadPostFormat", "start camera");
+                        Log.d(TAG, "start camera");
                         Bundle extras = o.getData().getExtras();
                         imageBitmap = (Bitmap) extras.get("data");
                         binding.uploadImagePost.setImageBitmap(imageBitmap);
                         photoUri = saveBitmapAndGetUri(imageBitmap);
-                        Log.d("UploadPostFormat", "photoUri : " + photoUri);
+                        Log.d(TAG, "photoUri : " + photoUri);
                         uploadImageToFirebase(photoUri);
                     }
                 }
@@ -85,67 +72,53 @@ public class UploadPostFormat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityUploadPostFormatBinding.inflate(getLayoutInflater());
+        binding = ActivityUploadCommentFormatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.scanPostButton.setOnClickListener(new View.OnClickListener() {
+        binding.scanCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(UploadPostFormat.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(UploadPostFormat.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                if (ContextCompat.checkSelfPermission(UploadCommentFormat.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(UploadCommentFormat.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                 } else {
                     openCamera();
                 }
             }
         });
 
-
         //firebase에 저장할 경로 입력 : 여기서는 PostInfo라는 곳에 업로드를 할예정
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("PostInfo");
+        DatabaseReference postRef = databaseReference.child(getIntent().getStringExtra("postID"));
         binding.uploadPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String detailPost = binding.postDetailInfo.getText().toString();
-                Log.d("UploadPostFormat", "detailPost : " + detailPost);
+                String detailPost = binding.commentDetailInfo.getText().toString();
+                Log.d(TAG, "detailPost : " + detailPost);
 
-                DatabaseReference postRef = databaseReference.push();
-                String postId = postRef.getKey();  // 자동 생성된 ID 가져오기
+                DatabaseReference commentRef = postRef.child("comments").push();
+                String postId = commentRef.getKey();  // 자동 생성된 ID 가져오기
+                Log.d(TAG, "postID"+postId);
                 //서버로 올릴 데이터 객체로 포장
-                PostInfo postInfo = new PostInfo(postId ,photoURL, detailPost, null);
+                CommentInfo commentInfo = new CommentInfo(postId , "사용자",detailPost, photoURL);
 
                 //위에서 저장한 경로에 올린다.
-                postRef.setValue(postInfo).addOnCompleteListener(task -> {
+                commentRef.setValue(commentInfo).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d("UploadPostFormat", "Post added successfully!");
+                        Log.d(TAG, "Post added successfully!");
                     } else {
-                        Log.e("UploadPostFormat", "Failed to add post", task.getException());
+                        Log.e(TAG, "Failed to add post", task.getException());
                     }
                 });
-                finish();
             }
         });
-
-
     }
 
     private void openCamera(){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityResult.launch(takePictureIntent);
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("UploadPostFormat", "onRequestPermissionsResult: Camera permission granted");
-                openCamera();
-            } else {
-                Log.d("UploadPostFormat", "onRequestPermissionsResult: Camera permission denied");
-                Toast.makeText(this, "Camera permission is required to scan ISBN", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
