@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.post.uploadpost.UploadPostFormat">
+    tools:context=".ui.post.uploadpost.comment.UploadCommentFormat">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +29,7 @@
                 />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/scanPostButton"
+                android:id="@+id/scanCommentButton"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:text="사진 올리기"
@@ -41,27 +41,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "태그 들어가용"
-            android:gravity="center"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:background="#696969"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text = "질문할 내용을 적어주세요"
+            android:text = "답변 내용을 적어주세요"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"/>
 
         <EditText
-            android:id="@+id/postDetailInfo"
+            android:id="@+id/commentDetailInfo"
             android:layout_width="match_parent"
             android:layout_height="390dp"
             android:layout_marginStart="5dp"
@@ -69,14 +55,13 @@
             android:background="@drawable/custom_edittext"/>
 
         <com.google.android.material.button.MaterialButton
-        android:id="@+id/uploadPostButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="end"
-        android:layout_margin="4dp"
-        android:text="질문 올리기"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+            android:id="@+id/uploadPostButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_margin="4dp"
+            android:text="답변달기"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
