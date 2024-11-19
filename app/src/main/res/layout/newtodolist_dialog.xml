@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <EditText
+        android:id="@+id/et_Input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="새로운 항목을 입력하세요."
+        android:textColorHint="#a9a9a9"/>
+    <LinearLayout
+        android:id="@+id/ll_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"/>
+
+</LinearLayout>
