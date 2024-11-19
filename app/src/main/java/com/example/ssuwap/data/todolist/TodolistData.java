@@ -9,9 +9,20 @@ import com.example.ssuwap.ui.todolist.TodomainActivity;
 public class TodolistData {
     private int id;
     private String todo;
+    private int color;
     private boolean isPlaying;
     private TodoTimeData timeData;
-    public TodolistData(int id, String todo) {
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public TodolistData(int id, String todo, int color) {
+        this.color = color;;
         this.id = id;
         this.todo = todo;
         this.isPlaying = false; // 기본값: 일시정지

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +22,16 @@ import com.example.ssuwap.databinding.TodoListBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyViewHolder> {
 
+    private OnTimeBlockListener listener;
     private ArrayList<TodolistData> list;
     private Context context;
     private TodotimeDBHelper dbHelper;
@@ -35,10 +39,14 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
     long startTime = 0;
     long endTime = 0;
 
-    public TodomainAdapter(Context context, ArrayList<TodolistData> list, TodotimeDBHelper dbHelper) {
+    public TodomainAdapter(Context context, ArrayList<TodolistData> list, TodotimeDBHelper dbHelper, OnTimeBlockListener listener) {
         this.context = context;
         this.list = list;
         this.dbHelper = dbHelper;
+        this.listener = listener;
+    }
+    public  interface OnTimeBlockListener {
+        void onTimeBlockSelected(int startHour, int startMinute, int endHour, int endMinute, int color);
     }
 
     @NonNull
@@ -51,6 +59,8 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         TodolistData item = list.get(position);
+        // 대한민국 시간대 (KST) 설정
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
 
         // 데이터 상태에 따라 버튼 이미지를 설정
         if (item.isPlaying()) {
@@ -72,11 +82,26 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
 
                                 endTime = System.currentTimeMillis();
                                 item.setPlaying(false);
-                                // holder.binding.btnTodo.setBackgroundResource(R.drawable.play); // 얘를 바꾸길 원한게 아니야
                                 TodolistData data = list.get(playingPosition);
                                 data.setPlaying(false);
                                 notifyItemChanged(playingPosition);
                                 playingPosition = -1;
+
+                                //시작시간
+                                calendar.setTimeInMillis(startTime);
+                                int startHour = calendar.get(Calendar.HOUR_OF_DAY);
+                                int startMinute = calendar.get(Calendar.MINUTE);
+
+                                //종료시간
+                                calendar.setTimeInMillis(endTime);
+                                int endHour = calendar.get(Calendar.HOUR_OF_DAY);
+                                int endMinute = calendar.get(Calendar.MINUTE);
+
+                                //칠하기
+                                if (listener != null) {
+                                    listener.onTimeBlockSelected(startHour, startMinute, endHour, endMinute, Color.RED); // 원하는 색상 지정
+                                }
+
                                 item.getTimeData().addSession(startTime, endTime);
                                 dbHelper.addSession(item.getId(), startTime, endTime);
                                 dbHelper.updateTotalDuration(item.getId(), endTime - startTime);
@@ -102,6 +127,22 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
                                 item.setPlaying(false);
                                 playingPosition = -1;
                                 holder.binding.btnTodo.setBackgroundResource(R.drawable.play);
+
+                                //시작시간
+                                calendar.setTimeInMillis(startTime);
+                                int startHour = calendar.get(Calendar.HOUR_OF_DAY);
+                                int startMinute = calendar.get(Calendar.MINUTE);
+
+                                //종료시간
+                                calendar.setTimeInMillis(endTime);
+                                int endHour = calendar.get(Calendar.HOUR_OF_DAY);
+                                int endMinute = calendar.get(Calendar.MINUTE);
+
+                                //칠하기
+                                if (listener != null) {
+                                    listener.onTimeBlockSelected(startHour, startMinute, endHour, endMinute, Color.RED); // 원하는 색상 지정
+                                }
+
                                 item.getTimeData().addSession(startTime, endTime);
                                 dbHelper.addSession(item.getId(), startTime, endTime);
                                 dbHelper.updateTotalDuration(item.getId(), endTime - startTime);

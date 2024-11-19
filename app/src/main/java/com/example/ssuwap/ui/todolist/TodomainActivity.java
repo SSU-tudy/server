@@ -1,13 +1,19 @@
 package com.example.ssuwap.ui.todolist;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,10 +23,13 @@ import com.example.ssuwap.R;
 import com.example.ssuwap.data.todolist.TodolistData;
 import com.example.ssuwap.data.todolist.TodotimeDBHelper;
 import com.example.ssuwap.databinding.ActivityTodomainBinding;
+import com.example.ssuwap.databinding.NewtodolistDialogBinding;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.TimeZone;
 
-public class TodomainActivity extends AppCompatActivity {
+public class TodomainActivity extends AppCompatActivity implements TodomainAdapter.OnTimeBlockListener{
     private ArrayList<TodolistData> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -28,6 +37,7 @@ public class TodomainActivity extends AppCompatActivity {
     private TodotimeDBHelper dbHelper = new TodotimeDBHelper(this);
     private int i = 0;
     private LinearLayout timetableContainer;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +49,7 @@ public class TodomainActivity extends AppCompatActivity {
         dbHelper = new TodotimeDBHelper(this);
 
         recyclerView = binding.rcvTodo;
-        adapter = new TodomainAdapter(this, list, dbHelper);
+        adapter = new TodomainAdapter(this, list, dbHelper, this);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -47,8 +57,10 @@ public class TodomainActivity extends AppCompatActivity {
         binding.btnAddrecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                list.add(new TodolistData(i++, "테스트용" + i));
+                addItemDialog();
                 adapter.notifyDataSetChanged(); // RecyclerView 업데이트
+
+
             }
         });
 
@@ -57,9 +69,16 @@ public class TodomainActivity extends AppCompatActivity {
             System.err.println("timetableContainer is null!");
             return;
         }
+
         initTimetable();
-        colorTimeBlock(System.currentTimeMillis(),System.currentTimeMillis()+3600000,Color.parseColor("#FFCC80"));
+
     }
+
+    public void onTimeBlockSelected(int startHour, int startMinute, int endHour, int endMinute, int color) {
+        // colorTimeBlock 호출
+        colorTimeBlock(startHour, startMinute, endHour, endMinute, color);
+    }
+
 
     private void initTimetable() {
         for (int hour = 0; hour < 24; hour++) {
@@ -115,12 +134,7 @@ public class TodomainActivity extends AppCompatActivity {
         }
     }
 
-    private void colorTimeBlock(long startTimeMillis, long endTimeMillis, int color) {
-        int startHour = (int) (startTimeMillis / (1000 * 60 * 60) % 24); // 24시간 단위
-        int startMinute = (int) (startTimeMillis / (1000 * 60) % 60);
-        int endHour = (int) (endTimeMillis / (1000 * 60 * 60) % 24);
-        int endMinute = (int) (endTimeMillis / (1000 * 60) % 60);
-
+    private void colorTimeBlock(int startHour, int startMinute, int endHour, int endMinute, int color) {
         int startCell = startHour * 60 + startMinute;
         int endCell = endHour * 60 + endMinute;
 
@@ -134,5 +148,47 @@ public class TodomainActivity extends AppCompatActivity {
         }
     }
 
+    private void addItemDialog() {
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View dialogView = getLayoutInflater().inflate(R.layout.newtodolist_dialog, null);
+
+
+        EditText editText = dialogView.findViewById(R.id.et_Input);
+        ViewGroup colorContainer = dialogView.findViewById(R.id.ll_color);
+
+        // 색상 목록 (10개)
+        int[] colors = {
+                Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW,
+                Color.CYAN, Color.MAGENTA, Color.GRAY, Color.LTGRAY,
+                Color.DKGRAY, Color.BLACK
+        };
+
+        final int[] selectedColor = {colors[0]}; // 선택된 색상 (기본값)
+
+        // 동그라미 색 버튼 동적 생성
+        for (int color : colors) {
+            View colorCircle = new View(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(70, 70); // 크기 설정
+            params.setMargins(16, 16, 16, 16);
+            colorCircle.setLayoutParams(params);
+            colorCircle.setBackgroundColor(color);
+            colorCircle.setOnClickListener(v -> selectedColor[0] = color); // 색 선택
+
+            colorContainer.addView(colorCircle);
+        }
+
+        dialog = new AlertDialog.Builder(this).setView(inflater.inflate(R.layout.newtodolist_dialog, null))
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        list.add(new TodolistData(i++, "test" ,1));
+                        Toast.makeText(TodomainActivity.this,"추가되었습니다", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton("취소", null)
+                .create();
+        dialog.show();
+    }
 
 }
