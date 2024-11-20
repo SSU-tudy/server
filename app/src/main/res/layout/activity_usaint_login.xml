@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewUsaintLogin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#FFFFFF"
+    tools:context=".UsaintLoginActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <!-- 앱 제목 -->
+        <TextView
+            android:id="@+id/tvUsaintLoginTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="SSU : Study with me"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- USaint 인증 박스 -->
+        <LinearLayout
+            android:id="@+id/llUsaintAuth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#E3F2FD"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toBottomOf="@id/tvUsaintLoginTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- 학번 입력 -->
+            <EditText
+                android:id="@+id/etUsaintStudentId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="학번"
+                android:inputType="number"
+                android:background="@drawable/edittext_background"
+                android:padding="12dp"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- USaint 비밀번호 입력 -->
+            <EditText
+                android:id="@+id/etUsaintPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="USaint 비밀번호"
+                android:inputType="textPassword"
+                android:background="@drawable/edittext_background"
+                android:padding="12dp"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- USaint 인증 버튼 -->
+            <Button
+                android:id="@+id/btnUsaintAuthenticate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="USaint 인증"
+                android:textColor="#FFFFFF"
+                android:background="#1976D2"
+                android:padding="12dp"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- 기존의 "일반 회원가입으로 진행" 버튼 제거됨 -->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
