@@ -6,7 +6,7 @@ public class UserAccount {
     private String password;    // User Pwd
     private String idToken;     // FB key value
     private String userName;
-
+    //aasdfsadf
     public UserAccount() { } // 빈 생성자 생성
 
     public String getEmailId() { return emailId; }
