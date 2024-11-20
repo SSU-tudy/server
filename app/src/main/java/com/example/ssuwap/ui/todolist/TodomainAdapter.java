@@ -1,9 +1,7 @@
 package com.example.ssuwap.ui.todolist;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,17 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ssuwap.R;
-import com.example.ssuwap.data.todolist.TodoTimeData;
 import com.example.ssuwap.data.todolist.TodolistData;
-import com.example.ssuwap.data.todolist.TodotimeDBHelper;
 import com.example.ssuwap.databinding.TodoListBinding;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -34,18 +29,19 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
     private OnTimeBlockListener listener;
     private ArrayList<TodolistData> list;
     private Context context;
-    private TodotimeDBHelper dbHelper;
+    private DatabaseReference databaseReference; // Firebase Database Reference
     private int playingPosition = -1; // 현재 재생 중인 항목의 위치
-    long startTime = 0;
-    long endTime = 0;
+    private long startTime = 0;
+    private long endTime = 0;
 
-    public TodomainAdapter(Context context, ArrayList<TodolistData> list, TodotimeDBHelper dbHelper, OnTimeBlockListener listener) {
+    public TodomainAdapter(Context context, ArrayList<TodolistData> list, OnTimeBlockListener listener) {
         this.context = context;
         this.list = list;
-        this.dbHelper = dbHelper;
         this.listener = listener;
+        this.databaseReference = FirebaseDatabase.getInstance().getReference("Todolist");
     }
-    public  interface OnTimeBlockListener {
+
+    public interface OnTimeBlockListener {
         void onTimeBlockSelected(int startHour, int startMinute, int endHour, int endMinute, int color);
     }
 
@@ -59,7 +55,6 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         TodolistData item = list.get(position);
-        // 대한민국 시간대 (KST) 설정
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
 
         // 데이터 상태에 따라 버튼 이미지를 설정
@@ -70,96 +65,84 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
         }
 
         holder.binding.btnTodo.setOnClickListener(v -> {
-
             if (playingPosition != -1 && playingPosition != item.getId()) {
-                AlertDialog alertDialog = new AlertDialog.Builder(context)
-                        .setTitle("종료")
-                        .setMessage("진행 중이던 공부를 마치시겠습니까?")
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(context, "공부시간이 기록되었습니다.", Toast.LENGTH_SHORT).show();
-
-                                endTime = System.currentTimeMillis();
-                                item.setPlaying(false);
-                                TodolistData data = list.get(playingPosition);
-                                data.setPlaying(false);
-                                notifyItemChanged(playingPosition);
-                                playingPosition = -1;
-
-                                //시작시간
-                                calendar.setTimeInMillis(startTime);
-                                int startHour = calendar.get(Calendar.HOUR_OF_DAY);
-                                int startMinute = calendar.get(Calendar.MINUTE);
-
-                                //종료시간
-                                calendar.setTimeInMillis(endTime);
-                                int endHour = calendar.get(Calendar.HOUR_OF_DAY);
-                                int endMinute = calendar.get(Calendar.MINUTE);
-
-                                //칠하기
-                                if (listener != null) {
-                                    listener.onTimeBlockSelected(startHour, startMinute, endHour, endMinute, Color.RED); // 원하는 색상 지정
-                                }
-
-                                item.getTimeData().addSession(startTime, endTime);
-                                dbHelper.addSession(item.getId(), startTime, endTime);
-                                dbHelper.updateTotalDuration(item.getId(), endTime - startTime);
-
-                            }
-                        })
-                        .setNegativeButton("취소", null)
-                        .create();
-
-                alertDialog.show();
-
-            }
-            else if (item.isPlaying()) {
-                AlertDialog alertDialog = new AlertDialog.Builder(context)
-                        .setTitle("종료")
-                        .setMessage("진행 중이던 공부를 마치시겠습니까?")
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(context, "공부시간이 기록되었습니다.", Toast.LENGTH_SHORT).show();
-
-                                endTime = System.currentTimeMillis();
-                                item.setPlaying(false);
-                                playingPosition = -1;
-                                holder.binding.btnTodo.setBackgroundResource(R.drawable.play);
-
-                                //시작시간
-                                calendar.setTimeInMillis(startTime);
-                                int startHour = calendar.get(Calendar.HOUR_OF_DAY);
-                                int startMinute = calendar.get(Calendar.MINUTE);
-
-                                //종료시간
-                                calendar.setTimeInMillis(endTime);
-                                int endHour = calendar.get(Calendar.HOUR_OF_DAY);
-                                int endMinute = calendar.get(Calendar.MINUTE);
-
-                                //칠하기
-                                if (listener != null) {
-                                    listener.onTimeBlockSelected(startHour, startMinute, endHour, endMinute, Color.RED); // 원하는 색상 지정
-                                }
-
-                                item.getTimeData().addSession(startTime, endTime);
-                                dbHelper.addSession(item.getId(), startTime, endTime);
-                                dbHelper.updateTotalDuration(item.getId(), endTime - startTime);
-                            }
-                        }).setNegativeButton("취소", null)
-                        .create();
-                alertDialog.show();
-            }
-            else {
-                // 재생버튼으로 전환
+                // 다른 아이템이 실행 중인 경우 종료 확인 다이얼로그
+                showEndDialog(item, calendar, holder);
+            } else if (item.isPlaying()) {
+                // 현재 아이템 정지
+                showEndDialog(item, calendar, holder);
+            } else {
+                // 현재 아이템 시작
                 startTime = System.currentTimeMillis();
-
                 item.setPlaying(true);
                 holder.binding.btnTodo.setBackgroundResource(R.drawable.pause);
                 playingPosition = item.getId();
+                updateFirebase(item); // Firebase 업데이트
             }
         });
+    }
+
+    private void showEndDialog(TodolistData item, Calendar calendar, MyViewHolder holder) {
+        new AlertDialog.Builder(context)
+                .setTitle("종료")
+                .setMessage("진행 중이던 공부를 마치시겠습니까?")
+                .setPositiveButton("확인", (dialogInterface, i) -> {
+                    Toast.makeText(context, "공부시간이 기록되었습니다.", Toast.LENGTH_SHORT).show();
+
+                    endTime = System.currentTimeMillis();
+                    item.setPlaying(false);
+                    playingPosition = -1;
+                    holder.binding.btnTodo.setBackgroundResource(R.drawable.play);
+
+                    // 시간 계산
+                    calendar.setTimeInMillis(startTime);
+                    int startHour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int startMinute = calendar.get(Calendar.MINUTE);
+
+                    calendar.setTimeInMillis(endTime);
+                    int endHour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int endMinute = calendar.get(Calendar.MINUTE);
+
+                    // 시간 블록 색칠
+                    if (listener != null) {
+                        listener.onTimeBlockSelected(startHour, startMinute, endHour, endMinute, Color.RED);
+                    }
+
+                    // Firebase에 세션 기록 추가
+                    addSessionToFirebase(item, startTime, endTime);
+                })
+                .setNegativeButton("취소", null)
+                .create()
+                .show();
+    }
+
+    private void updateFirebase(TodolistData item) {
+        // Firebase 데이터베이스 업데이트
+        databaseReference.child(String.valueOf(item.getId())).setValue(item)
+                .addOnSuccessListener(aVoid -> Log.d("Firebase", "데이터 업데이트 성공"))
+                .addOnFailureListener(e -> Log.e("Firebase", "데이터 업데이트 실패: " + e.getMessage()));
+    }
+
+    private void addSessionToFirebase(TodolistData item, long startTime, long endTime) {
+        String sessionId = databaseReference.child(String.valueOf(item.getId())).child("sessions").push().getKey();
+        Map<String, Object> sessionData = new HashMap<>();
+        sessionData.put("startTime", startTime);
+        sessionData.put("endTime", endTime);
+
+        databaseReference.child(String.valueOf(item.getId()))
+                .child("sessions")
+                .child(sessionId)
+                .setValue(sessionData)
+                .addOnSuccessListener(aVoid -> Log.d("Firebase", "세션 저장 성공"))
+                .addOnFailureListener(e -> Log.e("Firebase", "세션 저장 실패: " + e.getMessage()));
+
+        // 총 학습 시간 업데이트
+        long duration = endTime - startTime;
+        databaseReference.child(String.valueOf(item.getId()))
+                .child("totalDuration")
+                .setValue(item.getTotalDuration() + duration)
+                .addOnSuccessListener(aVoid -> Log.d("Firebase", "총 학습 시간 업데이트 성공"))
+                .addOnFailureListener(e -> Log.e("Firebase", "총 학습 시간 업데이트 실패: " + e.getMessage()));
     }
 
     @Override

@@ -1,63 +1,62 @@
 package com.example.ssuwap.data.todolist;
 
-import android.view.LayoutInflater;
-
-import com.example.ssuwap.R;
-import com.example.ssuwap.databinding.TodoListBinding;
-import com.example.ssuwap.ui.todolist.TodomainActivity;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TodolistData {
-    private int id;
-    private String todo;
-    private int color;
-    private boolean isPlaying;
-    private TodoTimeData timeData;
+    private String subject;
+    private List<Session> sessions;
+    private long totalDuration;
 
-    public int getColor() {
-        return color;
+    public TodolistData() {
+        // Firebase를 위한 기본 생성자
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public TodolistData(String subject) {
+        this.subject = subject;
+        this.sessions = new ArrayList<>();
+        this.totalDuration = 0;
     }
 
-    public TodolistData(int id, String todo, int color) {
-        this.color = color;;
-        this.id = id;
-        this.todo = todo;
-        this.isPlaying = false; // 기본값: 일시정지
-        this.timeData = new TodoTimeData();
+    public String getSubject() {
+        return subject;
     }
 
-    public int getId() {
-        return id;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public List<Session> getSessions() {
+        return sessions;
     }
 
-    public void setTodo(String todo) {
-        this.todo = todo;
+    public void addSession(long startTime, long endTime) {
+        sessions.add(new Session(startTime, endTime));
+        totalDuration += (endTime - startTime);
     }
 
-    public void setTimeData(TodoTimeData timeData) {
-        this.timeData = timeData;
+    public long getTotalDuration() {
+        return totalDuration;
     }
 
-    public String getTodo() {
-        return todo;
-    }
+    public static class Session {
+        private long startTime;
+        private long endTime;
 
-    public boolean isPlaying() {
-        return isPlaying;
-    }
+        public Session() {
+        }
 
-    public void setPlaying(boolean isPlaying) {
-        this.isPlaying = isPlaying;
-    }
+        public Session(long startTime, long endTime) {
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
 
-    public TodoTimeData getTimeData() {
-        return timeData;
+        public long getStartTime() {
+            return startTime;
+        }
+
+        public long getEndTime() {
+            return endTime;
+        }
     }
 }

@@ -49,7 +49,7 @@ public class TodomainActivity extends AppCompatActivity implements TodomainAdapt
         dbHelper = new TodotimeDBHelper(this);
 
         recyclerView = binding.rcvTodo;
-        adapter = new TodomainAdapter(this, list, dbHelper, this);
+       // adapter = new TodomainAdapter(this, list, dbHelper, this);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -182,7 +182,7 @@ public class TodomainActivity extends AppCompatActivity implements TodomainAdapt
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        list.add(new TodolistData(i++, "test" ,1));
+                        //list.add(new TodolistData(i++, "test" ,1));
                         Toast.makeText(TodomainActivity.this,"추가되었습니다", Toast.LENGTH_LONG).show();
                     }
                 })

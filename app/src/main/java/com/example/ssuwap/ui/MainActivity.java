@@ -12,6 +12,7 @@ import com.example.ssuwap.databinding.ActivityMainBinding;
 import com.example.ssuwap.ui.book.main.BookMainFragment;
 import com.example.ssuwap.ui.profile.ProfileMainFragment;
 import com.example.ssuwap.ui.todolist.TodoMainFragment;
+import com.example.ssuwap.ui.todolist.TodoMainFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
