@@ -1,0 +1,12 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 배경색 설정 (필요에 따라 변경) -->
+    <solid android:color="@android:color/white" />
+
+    <!-- 테두리 설정 -->
+    <stroke
+        android:width="2dp"
+        android:color="@android:color/darker_gray" />
+
+    <!-- 모서리 둥글기 설정 (필요할 경우) -->
+    <corners android:radius="2dp" />
+</shape>

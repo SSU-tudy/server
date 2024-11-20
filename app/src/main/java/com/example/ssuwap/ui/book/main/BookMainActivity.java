@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ssuwap.data.book.MainData;
 import com.example.ssuwap.R;
+import com.example.ssuwap.databinding.ActivityBookMainBinding;
 import com.example.ssuwap.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class BookMainActivity extends AppCompatActivity {
 
     private ArrayList<MainData> arrayList;
     private MainAdapter mainAdapter;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityBookMainBinding binding = ActivityBookMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         recyclerView = (RecyclerView) findViewById(R.id.rv);
@@ -45,12 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         //추천도서 이미지버튼
         imageButtons = new ImageButton []{
-                binding.recBook1,
-                binding.recBook2,
-                binding.recBook3,
-                binding.recBook4,
-                binding.recBook5,
-                binding.recBook6
+
         };
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:orientation="horizontal"
+    android:layout_margin="10dp">
+    <CheckBox
+        android:id="@+id/cb_todo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/tv_todo"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="테스트용입미다"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp"/>
+    <Button
+        android:id="@+id/btn_todo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/play"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="@color/test"
+        android:layout_gravity="center_vertical"/>
+
+</LinearLayout>
