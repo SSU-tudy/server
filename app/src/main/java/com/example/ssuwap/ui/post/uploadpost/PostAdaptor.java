@@ -54,6 +54,15 @@ public class PostAdaptor extends RecyclerView.Adapter<PostAdaptor.PostViewHolder
             }
         });
 
+        holder.binding.postImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FullScreenActivity.class);
+                intent.putExtra("imageUrl", postInfo.getImageUrl()); // 이미지 URL 전달
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override

@@ -18,6 +18,7 @@ import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.data.post.CommentInfo;
 import com.example.ssuwap.data.post.PostInfo;
 import com.example.ssuwap.databinding.ActivityPostMainBinding;
+import com.example.ssuwap.ui.post.uploadpost.comment.UploadCommentFormat;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
@@ -53,6 +54,12 @@ public class PostMainActivity extends AppCompatActivity {
         binding.postRV.setLayoutManager(new LinearLayoutManager(this));
         binding.postRV.setAdapter(postAdaptor);  // 어댑터 설정
 
+        binding.postUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(PostMainActivity.this, UploadPostFormat.class));
+            }
+        });
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

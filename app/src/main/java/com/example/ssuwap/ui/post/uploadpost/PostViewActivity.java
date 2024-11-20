@@ -48,7 +48,7 @@ public class PostViewActivity extends AppCompatActivity {
             // Comments를 가져와서 RecyclerView에 설정
             ArrayList<CommentInfo> comments = postInfo.getCommentsList(); // commentsList 가져오기
             binding.commentRV.setLayoutManager(new LinearLayoutManager(this));
-            binding.commentRV.setAdapter(new CommentAdaptor(comments));
+            binding.commentRV.setAdapter(new CommentAdaptor(this, comments));
 
         } else {
             // postInfo가 null인 경우 로깅
@@ -66,6 +66,15 @@ public class PostViewActivity extends AppCompatActivity {
                     Log.e("PostViewActivity", "PostInfo is null, unable to post comment.");
                 }
             }
+        });
+
+        binding.postViewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PostViewActivity.this, FullScreenActivity.class);
+                intent.putExtra("imageUrl", postInfo.getImageUrl()); // 이미지 URL 전달
+                startActivity(intent);
+            }r
         });
     }
 }

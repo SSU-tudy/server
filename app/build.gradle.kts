@@ -36,6 +36,9 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.photoview)
+
     implementation(libs.glide)
 
     // CameraX 라이브러리

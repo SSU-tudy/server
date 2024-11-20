@@ -36,6 +36,7 @@ import androidx.exifinterface.media.ExifInterface;
 
 import com.bumptech.glide.Glide;
 import com.example.ssuwap.R;
+import com.example.ssuwap.data.post.CommentInfo;
 import com.example.ssuwap.data.post.PostInfo;
 import com.example.ssuwap.databinding.ActivityUploadPostFormatBinding;
 import com.example.ssuwap.ui.book.upload.isbn.UploadBookScan;
@@ -51,6 +52,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -84,6 +87,7 @@ public class UploadPostFormat extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("UploadPostFormat", "onCreate()");
         super.onCreate(savedInstanceState);
         binding = ActivityUploadPostFormatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -108,11 +112,13 @@ public class UploadPostFormat extends AppCompatActivity {
 
                 String detailPost = binding.postDetailInfo.getText().toString();
                 Log.d("UploadPostFormat", "detailPost : " + detailPost);
+                Log.d("UploadPostFormat", "URL : " + photoURL);
 
                 DatabaseReference postRef = databaseReference.push();
                 String postId = postRef.getKey();  // 자동 생성된 ID 가져오기
+                Log.d("UploadPostFormat", "key : " + postId);
                 //서버로 올릴 데이터 객체로 포장
-                PostInfo postInfo = new PostInfo(postId ,photoURL, detailPost, null);
+                PostInfo postInfo = new PostInfo(postId ,photoURL, detailPost, new HashMap<>());
 
                 //위에서 저장한 경로에 올린다.
                 postRef.setValue(postInfo).addOnCompleteListener(task -> {
