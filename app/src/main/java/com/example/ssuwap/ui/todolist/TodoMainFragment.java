@@ -1,5 +1,6 @@
 package com.example.ssuwap.ui.todolist;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +43,8 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
     private TodomainAdapter adapter;
     private LinearLayout timetableContainer;
     private DatabaseReference databaseReference;
+    private int listcnt = 0;
+    private AlertDialog dialog;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -101,7 +105,6 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
 
         // 추가 버튼 클릭 리스너
         binding.btnAddrecord.setOnClickListener(v -> addItemDialog());
-
         // 타임테이블 초기화
         timetableContainer = binding.timetableContainer;
         initTimetable();
@@ -112,6 +115,8 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
     }
 
     private void loadData() {
@@ -126,7 +131,7 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
                 list.clear();
                 for (DataSnapshot subjectSnapshot : snapshot.getChildren()) {
                     String subject = subjectSnapshot.getKey();
-                    TodolistData todolistData = new TodolistData(subject);
+                    TodolistData todolistData = new TodolistData(listcnt, subject, 1);
                     list.add(todolistData);
                 }
                 adapter.notifyDataSetChanged();
@@ -140,7 +145,55 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
     }
 
     private void addItemDialog() {
+        View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.newtodolist_dialog, null);
+        EditText editText = dialogView.findViewById(R.id.et_Input);
 
+        // 색상 선택 동적 생성
+        ViewGroup colorContainer = dialogView.findViewById(R.id.ll_color);
+        int[] colors = {
+                Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW,
+                Color.CYAN, Color.MAGENTA, Color.GRAY, Color.LTGRAY,
+                Color.DKGRAY, Color.BLACK
+        };
+        final int[] selectedColor = {colors[0]};
+        for (int color : colors) {
+            View colorCircle = new View(requireContext());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(70, 70);
+            params.setMargins(16, 16, 16, 16);
+            colorCircle.setLayoutParams(params);
+            colorCircle.setBackgroundColor(color);
+            colorCircle.setOnClickListener(v -> selectedColor[0] = color);
+            colorContainer.addView(colorCircle);
+        }
+        // 다이얼로그 생성
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setPositiveButton("확인", (dialogInterface, i) -> {
+                    String input = editText.getText().toString();
+                    if (!input.isEmpty()) {
+                        addItemToFirebase(input, selectedColor[0]);
+                        Toast.makeText(requireContext(), "추가되었습니다", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), "할 일을 입력하세요", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("취소", null)
+                .create();
+        dialog.show();
+
+    }
+    private void addItemToFirebase(String todo, int color) {
+        Calendar calendar = Calendar.getInstance();
+        String year = String.valueOf(calendar.get(Calendar.YEAR));
+        String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+
+        DatabaseReference dayReference = databaseReference.child(year).child(month).child(day);
+        String key = dayReference.push().getKey();
+
+        TodolistData newItem = new TodolistData(listcnt, todo, color);
+        dayReference.child(key).setValue(newItem);
+        listcnt++;
     }
 
     private void initTimetable() {
