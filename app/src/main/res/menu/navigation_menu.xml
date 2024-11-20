@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/page_book"
+        android:enabled="true"
+        android:icon="@drawable/baseline_menu_book_24"
+        android:title="Book"/>
+    <item
+        android:id="@+id/page_question"
+        android:enabled="true"
+        android:icon="@drawable/baseline_dashboard_24"
+        android:title="Question"/>
+    <item
+        android:id="@+id/page_plus"
+        android:enabled="true"
+        android:icon="@drawable/baseline_control_point_24"
+        android:title="Plus"/>
+    <item
+        android:id="@+id/page_todo"
+        android:enabled="true"
+        android:icon="@drawable/baseline_checklist_rtl_24"
+        android:title="To-do list"/>
+    <item
+        android:id="@+id/page_profile"
+        android:title="Profile"
+        android:icon="@drawable/baseline_person_24"
+        android:enabled="true"/>
+
+</menu>
