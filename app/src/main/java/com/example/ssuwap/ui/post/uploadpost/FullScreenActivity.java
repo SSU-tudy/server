@@ -1,6 +1,7 @@
 package com.example.ssuwap.ui.post.uploadpost;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +19,15 @@ public class FullScreenActivity extends AppCompatActivity {
     ActivityFullScreenBinding binding;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("PostAdaptor", "FullScreenActivity start()");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d("PostAdaptor", "FullScreenActivity");
         binding = ActivityFullScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

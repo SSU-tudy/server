@@ -30,6 +30,8 @@ import com.example.ssuwap.data.post.CommentInfo;
 import com.example.ssuwap.data.post.PostInfo;
 import com.example.ssuwap.databinding.ActivityUploadCommentFormatBinding;
 import com.example.ssuwap.ui.post.uploadpost.UploadPostFormat;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -50,6 +52,7 @@ public class UploadCommentFormat extends AppCompatActivity {
     private Uri photoUri;
     private String photoURL;
     private Bitmap imageBitmap;
+    private String userName;
 
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -86,6 +89,8 @@ public class UploadCommentFormat extends AppCompatActivity {
             }
         });
 
+        getUserNameForFirebase();
+
         //firebase에 저장할 경로 입력 : 여기서는 PostInfo라는 곳에 업로드를 할예정
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("PostInfo");
@@ -101,7 +106,7 @@ public class UploadCommentFormat extends AppCompatActivity {
                 String postId = commentRef.getKey();  // 자동 생성된 ID 가져오기
                 Log.d(TAG, "postID"+postId);
                 //서버로 올릴 데이터 객체로 포장
-                CommentInfo commentInfo = new CommentInfo(postId , "사용자",detailPost, photoURL);
+                CommentInfo commentInfo = new CommentInfo(userName, postId, detailPost, photoURL);
 
                 //위에서 저장한 경로에 올린다.
                 commentRef.setValue(commentInfo).addOnCompleteListener(task -> {
@@ -111,8 +116,31 @@ public class UploadCommentFormat extends AppCompatActivity {
                         Log.e(TAG, "Failed to add post", task.getException());
                     }
                 });
+
+                finish();
             }
         });
+    }
+
+    private void getUserNameForFirebase(){
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser != null) {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("studentName");
+            userRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String userId = task.getResult().getValue(String.class);
+                    if (userId != null) {
+                        userName = userId;
+                    } else {
+                        Log.d("UploadPostFormat", "User ID가 존재하지 않습니다.");
+                    }
+                } else {
+                    Log.d("UploadPostFormat", "User ID 가져오기 실패.");
+                }
+            });
+        }
     }
 
     private void openCamera(){

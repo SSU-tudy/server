@@ -2,15 +2,19 @@ package com.example.ssuwap.ui.post.uploadpost;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.ssuwap.R;
 import com.example.ssuwap.data.post.PostInfo;
 import com.example.ssuwap.databinding.PostItemBinding;
 
@@ -19,11 +23,17 @@ import java.util.ArrayList;
 public class PostAdaptor extends RecyclerView.Adapter<PostAdaptor.PostViewHolder> {
     private ArrayList<PostInfo> list;
     private Context context;
+    FragmentManager fragmentManager;
 
-    public PostAdaptor(Context context, ArrayList<PostInfo> list) {
+    public PostAdaptor(Context context, ArrayList<PostInfo> list, FragmentManager fragmentManager) {
         Log.d("PostAdaptor", "PostAdaptor()");
         this.context = context;
         this.list = list;
+        this.fragmentManager = fragmentManager;
+
+        if (fragmentManager == null) {
+            Log.e("PostAdaptor", "FragmentManager is null");
+        }
     }
 
     @NonNull
@@ -48,8 +58,34 @@ public class PostAdaptor extends RecyclerView.Adapter<PostAdaptor.PostViewHolder
         holder.binding.postView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, PostViewActivity.class);
-                intent.putExtra("PostData", postInfo);
+
+                Log.d("PostAdaptor", "onClick()");
+
+                if (postInfo == null) {
+                    Log.e("PostAdaptor", "postInfo is null");
+                }
+                else Log.d("PostAdaptor", "postInfo is success");
+
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("PostInfo", postInfo);
+
+                PostViewFragment postViewFragment = PostViewFragment
+                        .newInstance("Param1","Param2",postInfo);
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, postViewFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        holder.binding.postImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FullScreenActivity.class);
+                Log.d("PostAdaptor", "PostAdaptor ImageUrl : "+postInfo.getImageUrl());
+                intent.putExtra("imageUrl", postInfo.getImageUrl()); // 이미지 URL 전달
                 context.startActivity(intent);
             }
         });

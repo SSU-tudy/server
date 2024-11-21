@@ -45,9 +45,7 @@
         <activity
             android:name=".ui.post.uploadpost.PostViewActivity"
             android:exported="true"></activity>
-        <activity
-            android:name=".ui.post.uploadpost.PostMainActivity"
-            android:exported="true"></activity>
+        <activity android:name=".ui.post.uploadpost.FullScreenActivity" />
         <activity
             android:name=".ui.post.uploadpost.UploadPostFormat"
             android:exported="true"></activity>

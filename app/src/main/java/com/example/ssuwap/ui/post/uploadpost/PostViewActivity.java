@@ -68,13 +68,13 @@ public class PostViewActivity extends AppCompatActivity {
             }
         });
 
-        binding.postViewImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PostViewActivity.this, FullScreenActivity.class);
-                intent.putExtra("imageUrl", postInfo.getImageUrl()); // 이미지 URL 전달
-                startActivity(intent);
-            }
-        });
+//        binding.postViewImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(PostViewActivity.this, FullScreenActivity.class);
+//                intent.putExtra("imageUrl", postInfo.getImageUrl()); // 이미지 URL 전달
+//                startActivity(intent);
+//            }
+//        });
     }
 }
