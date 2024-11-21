@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, "로그인에 성공했습니다.", Toast.LENGTH_SHORT).show();
                                         // Move to main activity or dashboard
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class); // Assume MainActivity exists
+                                        intent.putExtra("userId",user.getUid());
                                         startActivity(intent);
                                         finish(); // Finish LoginActivity
                                     }

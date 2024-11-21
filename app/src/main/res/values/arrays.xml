@@ -16,7 +16,7 @@
 
     <!-- 학과 배열 -->
     <string-array name="departments_array">
-        <item>컴퓨터공학과</item>
+        <item>컴퓨터학부</item>
         <item>전자공학과</item>
         <item>기계공학과</item>
         <item>산업공학과</item>
