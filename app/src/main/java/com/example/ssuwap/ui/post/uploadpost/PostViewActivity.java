@@ -74,7 +74,7 @@ public class PostViewActivity extends AppCompatActivity {
                 Intent intent = new Intent(PostViewActivity.this, FullScreenActivity.class);
                 intent.putExtra("imageUrl", postInfo.getImageUrl()); // 이미지 URL 전달
                 startActivity(intent);
-            }r
+            }
         });
     }
 }
