@@ -1,8 +1,9 @@
 package com.example.ssuwap.data.book;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class BookInfo {
+public class BookInfo implements Serializable{
     public String title;
     public String imageUrl;
     public String author;
