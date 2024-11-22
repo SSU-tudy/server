@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ssuwap.R;
+import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.ActivityChatBinding;
 import com.example.ssuwap.data.chat.ChatData;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +50,13 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // chatting title
+        BookInfo bookInfo = (BookInfo) getIntent().getSerializableExtra("BookInfo");
+        if(bookInfo != null){
+            myBook = bookInfo.getTitle();
+            binding.etChatTitle.setText(myBook);
+        }
 
         // FirebaseAuth 초기화
         firebaseAuth = FirebaseAuth.getInstance();
