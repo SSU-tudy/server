@@ -60,7 +60,6 @@ public class TodomainActivity extends AppCompatActivity implements TodomainAdapt
                 addItemDialog();
                 adapter.notifyDataSetChanged(); // RecyclerView 업데이트
 
-
             }
         });
 

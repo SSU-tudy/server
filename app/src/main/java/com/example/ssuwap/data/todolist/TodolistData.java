@@ -5,31 +5,28 @@ import java.util.List;
 
 public class TodolistData {
 
-    private int id;
+    private String key;
     private String subject;
-    private List<Session> sessions;
+    //private List<Session> sessions;
     private long totalDuration;
     private int color;
     private boolean isPlaying;
 
-    public int getId() {
-        return id;
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getKey() {
+        return key;
     }
 
-    public TodolistData(int id, String subject, int color) {
+    public TodolistData(String key, String subject, int color) {
         this.subject = subject;
         this.color = color;
-        this.id = id;
-        this.sessions = new ArrayList<>();
+        this.key = key;
+        //this.sessions = new ArrayList<>();
         this.totalDuration = 0;
-    }
-
-    public void setSessions(List<Session> sessions) {
-        this.sessions = sessions;
     }
 
     public void setTotalDuration(long totalDuration) {
@@ -64,14 +61,14 @@ public class TodolistData {
         this.subject = subject;
     }
 
-    public List<Session> getSessions() {
-        return sessions;
-    }
+//    public List<Session> getSessions() {
+//        return sessions;
+//    }
 
-    public void addSession(long startTime, long endTime) {
-        sessions.add(new Session(startTime, endTime));
-        totalDuration += (endTime - startTime);
-    }
+//    public void addSession(long startTime, long endTime) {
+//        sessions.add(new Session(startTime, endTime));
+//        totalDuration += (endTime - startTime);
+//    }
 
     public long getTotalDuration() {
         return totalDuration;
