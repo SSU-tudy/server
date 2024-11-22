@@ -16,6 +16,7 @@ import com.example.ssuwap.ui.post.uploadpost.PostMainFragment;
 import com.example.ssuwap.ui.post.uploadpost.UploadPostFormat;
 import com.example.ssuwap.ui.profile.ProfileMainFragment;
 import com.example.ssuwap.ui.todolist.TodoMainFragment;
+import com.example.ssuwap.ui.todolist.TodoMainFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 

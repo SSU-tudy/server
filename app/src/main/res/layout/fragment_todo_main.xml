@@ -6,6 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <TextView
+        android:id="@+id/total_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:padding="16dp"
+        android:text="총 학습 시간: 00:00:00"
+        android:gravity="center_horizontal" />
     <LinearLayout
         android:id="@+id/ll_chklist"
         android:layout_width="match_parent"
@@ -21,6 +29,7 @@
             android:text="+기록 추가"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_todo"
+            android:theme="@style/Base.Theme.Ssuwap"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </androidx.recyclerview.widget.RecyclerView>
@@ -43,6 +52,7 @@
                 android:layout_height="30sp"
                 android:text="오늘의 하이라이트"
                 android:gravity="center_horizontal|center_vertical"/>
+            <!--탐테-->
             <!--탐테-->
             <ScrollView
                 android:layout_width="match_parent"
