@@ -36,10 +36,14 @@ import androidx.exifinterface.media.ExifInterface;
 
 import com.bumptech.glide.Glide;
 import com.example.ssuwap.R;
+import com.example.ssuwap.data.post.CommentInfo;
 import com.example.ssuwap.data.post.PostInfo;
 import com.example.ssuwap.databinding.ActivityUploadPostFormatBinding;
+import com.example.ssuwap.ui.book.buying.chat.ChatActivity;
 import com.example.ssuwap.ui.book.upload.isbn.UploadBookScan;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -51,6 +55,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -61,6 +67,7 @@ public class UploadPostFormat extends AppCompatActivity {
     private Uri photoUri;
     private String photoURL;
     private Bitmap imageBitmap;
+    private String userName;
 
     private ActivityUploadPostFormatBinding binding;
 
@@ -84,6 +91,7 @@ public class UploadPostFormat extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("UploadPostFormat", "onCreate()");
         super.onCreate(savedInstanceState);
         binding = ActivityUploadPostFormatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -99,6 +107,7 @@ public class UploadPostFormat extends AppCompatActivity {
             }
         });
 
+        getUserNameForFirebase();
 
         //firebase에 저장할 경로 입력 : 여기서는 PostInfo라는 곳에 업로드를 할예정
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("PostInfo");
@@ -108,11 +117,13 @@ public class UploadPostFormat extends AppCompatActivity {
 
                 String detailPost = binding.postDetailInfo.getText().toString();
                 Log.d("UploadPostFormat", "detailPost : " + detailPost);
+                Log.d("UploadPostFormat", "URL : " + photoURL);
 
                 DatabaseReference postRef = databaseReference.push();
                 String postId = postRef.getKey();  // 자동 생성된 ID 가져오기
+                Log.d("UploadPostFormat", "name : " + userName);
                 //서버로 올릴 데이터 객체로 포장
-                PostInfo postInfo = new PostInfo(postId ,photoURL, detailPost, null);
+                PostInfo postInfo = new PostInfo(userName, postId ,photoURL, detailPost, new HashMap<>());
 
                 //위에서 저장한 경로에 올린다.
                 postRef.setValue(postInfo).addOnCompleteListener(task -> {
@@ -127,6 +138,27 @@ public class UploadPostFormat extends AppCompatActivity {
         });
 
 
+    }
+
+    private void getUserNameForFirebase(){
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser != null) {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("studentName");
+            userRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String userId = task.getResult().getValue(String.class);
+                    if (userId != null) {
+                        userName = userId;
+                    } else {
+                        Log.d("UploadPostFormat", "User ID가 존재하지 않습니다.");
+                    }
+                } else {
+                    Log.d("UploadPostFormat", "User ID 가져오기 실패.");
+                }
+            });
+        }
     }
 
     private void openCamera(){

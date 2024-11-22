@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PostInfo implements Parcelable {
+    public String userName;
     public String postID;
     public String imageUrl;
     public String description;
@@ -22,7 +23,8 @@ public class PostInfo implements Parcelable {
         commentsList = new ArrayList<>();
     }
 
-    public PostInfo(String postID, String imageUrl, String description, Map<String, CommentInfo> comments) {
+    public PostInfo(String userName,String postID, String imageUrl, String description, Map<String, CommentInfo> comments) {
+        this.userName = userName;
         this.postID = postID;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -31,6 +33,7 @@ public class PostInfo implements Parcelable {
     }
 
     protected PostInfo(Parcel in) {
+        userName = in.readString();
         postID = in.readString();
         imageUrl = in.readString();
         description = in.readString();
@@ -65,6 +68,7 @@ public class PostInfo implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(userName);
         parcel.writeString(postID);
         parcel.writeString(imageUrl);
         parcel.writeString(description);
@@ -86,16 +90,23 @@ public class PostInfo implements Parcelable {
         this.description = description;
     }
 
-    public ArrayList<CommentInfo> getCommentsList() {
-        return commentsList;
-    }
-
     public void setCommentsList(ArrayList<CommentInfo> commentsList) {
         this.commentsList = commentsList;
         this.comments = new HashMap<>();
         for (CommentInfo comment : commentsList) {
             comments.put(comment.getCommentID(), comment);
         }
+    }
+
+    public void setComments(Map<String, CommentInfo> comments) {
+        this.comments = comments;
+        this.commentsList = new ArrayList<>(comments.values()); // Map에서 ArrayList로 변환
+    }
+
+    public void setUserName(String userName){ this.userName = userName; }
+
+    public ArrayList<CommentInfo> getCommentsList() {
+        return commentsList;
     }
 
     public String getPostID() {
@@ -110,12 +121,9 @@ public class PostInfo implements Parcelable {
         return description;
     }
 
-    public void setComments(Map<String, CommentInfo> comments) {
-        this.comments = comments;
-        this.commentsList = new ArrayList<>(comments.values()); // Map에서 ArrayList로 변환
-    }
-
     public Map<String, CommentInfo> getComments() {
         return comments;
     }
+
+    public String getUserName() { return userName; }
 }

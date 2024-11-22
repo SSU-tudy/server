@@ -1,4 +1,4 @@
-package com.example.ssuwap.ui.todolist;
+package com.example.ssuwap.nono;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,13 +22,11 @@ import com.example.ssuwap.R;
 import com.example.ssuwap.data.todolist.TodolistData;
 import com.example.ssuwap.data.todolist.TodotimeDBHelper;
 import com.example.ssuwap.databinding.ActivityTodomainBinding;
-import com.example.ssuwap.databinding.NewtodolistDialogBinding;
+import com.example.ssuwap.ui.todolist.TodomainAdapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.TimeZone;
 
-public class TodomainActivity extends AppCompatActivity implements TodomainAdapter.OnTimeBlockListener{
+public class TodomainActivity extends AppCompatActivity implements TodomainAdapter.OnTimeBlockListener {
     private ArrayList<TodolistData> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;

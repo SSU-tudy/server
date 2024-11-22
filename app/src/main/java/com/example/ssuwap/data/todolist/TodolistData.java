@@ -1,11 +1,5 @@
 package com.example.ssuwap.data.todolist;
 
-import android.view.LayoutInflater;
-
-import com.example.ssuwap.R;
-import com.example.ssuwap.databinding.TodoListBinding;
-import com.example.ssuwap.ui.todolist.TodomainActivity;
-
 public class TodolistData {
     private int id;
     private String todo;

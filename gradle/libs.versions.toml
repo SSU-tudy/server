@@ -19,6 +19,7 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
 firebaseDatabase = "21.0.0"
 firebase-storage-version = "19.2.0"
+photoview = "2.3.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -39,6 +40,7 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-storage = { module = "com.google.firebase:firebase-storage", version.ref = "firebase-storage-version" }
+photoview = { group = "com.github.chrisbanes", name = "PhotoView", version.ref = "photoview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

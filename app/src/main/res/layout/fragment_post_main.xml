@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/main"
+    tools:context=".ui.post.uploadpost.PostMainFragment">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBaseline_toBottomOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,17 +45,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postRV"
             android:layout_width="match_parent"
-            android:layout_height="530dp">
+            android:layout_height="wrap_content">
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <Button
-            android:id="@+id/postUpload"
-            android:layout_width="162dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="게시글 작성" />
-
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
