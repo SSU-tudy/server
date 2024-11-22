@@ -28,10 +28,12 @@
                 android:layout_margin="10dp"
                 android:orientation="vertical">
                 <ImageView
+                    android:id="@+id/iv_book"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:src="@mipmap/ic_launcher"/>
                 <TextView
+                    android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
@@ -42,6 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"/>
                 <TextView
+                    android:id="@+id/tv_description"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/exLongtext"

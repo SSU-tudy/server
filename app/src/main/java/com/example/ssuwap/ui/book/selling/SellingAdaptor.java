@@ -1,8 +1,10 @@
 package com.example.ssuwap.ui.book.selling;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.SellinglistBinding;
+import com.example.ssuwap.ui.book.buying.BuyingActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +39,10 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
 
     @Override
     public void onBindViewHolder(@NonNull SellingViewHolder holder, int position) {
+        // 현재 책 position
+        BookInfo book = arrayList.get(position);
+
+        // holder 설정
         Glide.with(holder.itemView)
                 .load(arrayList.get(position).getImageUrl())
                 .into(holder.binding.ivBook); Log.d("SellingAdaptor", "image check");
@@ -46,6 +53,16 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
         long elapsedTime = (System.currentTimeMillis() - arrayList.get(position).getTime()) / (1000 * 60 * 60);
         if (elapsedTime < 24) holder.binding.time.setText(String.format("%d시간 전", elapsedTime));
         else holder.binding.time.setText(String.format("%d일 전", elapsedTime/24));
+
+        // holder listener
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, BuyingActivity.class);
+                intent.putExtra("BookInfo", book);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
