@@ -1,4 +1,4 @@
-package com.example.ssuwap.ui.book.main;
+package com.example.ssuwap.nono;
 
 import android.os.Bundle;
 import android.widget.ImageButton;
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ssuwap.data.book.MainData;
 import com.example.ssuwap.R;
 import com.example.ssuwap.databinding.ActivityBookMainBinding;
-import com.example.ssuwap.databinding.ActivityMainBinding;
+import com.example.ssuwap.ui.book.main.MainAdapter;
 
 import java.util.ArrayList;
 

@@ -34,10 +34,16 @@
             android:name=".ui.login.UsaintLoginActivity"
             android:exported="true"></activity>
         <activity
-            android:name=".ui.book.main.BookMainActivity"
-            android:exported="false" />
+            android:name=".nono.BookMainActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
-            android:name=".ui.todolist.TodomainActivity"
+            android:name=".nono.TodomainActivity"
             android:exported="true"></activity>
         <activity
             android:name=".ui.post.uploadpost.comment.UploadCommentFormat"
@@ -68,7 +74,7 @@
             android:name=".ui.book.buying.BuyingActivity"
             android:exported="true"></activity>
         <activity
-            android:name=".ui.book.selling.SellinglistActivity"
+            android:name=".nono.SellinglistActivity"
             android:exported="true"></activity>
         <activity
             android:name=".ui.MainActivity"

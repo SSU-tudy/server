@@ -1,4 +1,4 @@
-package com.example.ssuwap.ui.book.selling;
+package com.example.ssuwap.nono;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.ActivitySellinglistAvtivityBinding;
+import com.example.ssuwap.ui.book.selling.SellingAdaptor;
 import com.example.ssuwap.ui.book.upload.UploadBookFormat;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
