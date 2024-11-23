@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 if(itemId == R.id.page_plus){
                     Log.d("MainActivity", "page_plus");
                     startActivity(new Intent(MainActivity.this, UploadPostFormat.class));
-                    transferTo(PostMainFragment.newInstance("Param1", "Param2"));
                 }
 
                 return false;
