@@ -25,6 +25,9 @@ import android.widget.Toast;
 import com.example.ssuwap.R;
 import com.example.ssuwap.data.todolist.TodolistData;
 import com.example.ssuwap.databinding.FragmentTodoMainBinding;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -120,6 +124,7 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         timetableContainer = binding.timetableContainer;
         initTimetable();
         calculateTotalTimeFromDB();
+        fetchPieChart();
         return binding.getRoot();
     }
 
@@ -127,6 +132,8 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
+    ///얘 날짜 정보를 달력에서 뽑아와서 넣어야될듯 날짜뽑아서 매개변수로 주면 그날짜의 공부정보 다가꼬오니까 그걸 넣어라
     private void loadData() {
         Calendar calendar = Calendar.getInstance();
         String year = String.valueOf(calendar.get(Calendar.YEAR));
@@ -247,7 +254,6 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         // Firebase에 저장
         dayReference.child(uniqueKey).setValue(itemData)
                 .addOnSuccessListener(aVoid -> {
-                    //Toast.makeText(requireContext(), "새 항목이 추가되었습니다.", Toast.LENGTH_SHORT).show();
                     loadData(); // 데이터 다시 로드
                 })
                 .addOnFailureListener(e -> {
@@ -366,9 +372,7 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
 
         binding.totalTime.setText(String.format("총 학습 시간: %02d:%02d:%02d", hours, minutes, seconds));
     }
-    void setTimer(long time){
-        totalTime = time;
-    }
+
     private void calculateTotalTimeFromDB() {
         Calendar calendar = Calendar.getInstance();
         String year = String.valueOf(calendar.get(Calendar.YEAR));
@@ -385,8 +389,7 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
                         totalTime += duration;
                     }
                 }
-                // 타이머 시작 시 초기 totalTime 설정
-                setTimer(totalTime);
+                updateTotalTime(totalTime);
             }
 
             @Override
@@ -396,15 +399,85 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         });
     }
 
+    //리사이클러뷰 버튼눌림
     @Override
     public void onRunningStateChanged(TodolistData item, boolean isRunning) {
         if(isRunning) {
-            calculateTotalTimeFromDB();
+            calculateTotalTimeFromDB(); //totalTime 계산 from DB
             startTimer(totalTime); // 타이머 시작
         }
         else{
             stopTimer();
             calculateTotalTimeFromDB();
+            fetchPieChart();
         }
     }
+    private void fetchPieChart() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Long> subjectDurationMap = new HashMap<>();
+                Map<String, Integer> subjectColorMap = new HashMap<>();
+
+                for (DataSnapshot yearSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
+                        for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) {
+                            for (DataSnapshot taskSnapshot : daySnapshot.getChildren()) {
+                                String subject = taskSnapshot.child("subject").getValue(String.class);
+                                Long duration = taskSnapshot.child("totalDuration").getValue(Long.class);
+                                String colorHex = taskSnapshot.child("color").getValue(String.class);
+
+                                if (subject != null && duration != null && colorHex != null) {
+                                    subjectDurationMap.put(subject,
+                                            subjectDurationMap.getOrDefault(subject, 0L) + duration);
+                                    subjectColorMap.putIfAbsent(subject, Color.parseColor(colorHex));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 차트 생성
+                createPieChart(subjectDurationMap, subjectColorMap);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(requireContext(), "데이터 로드 실패: " + error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void createPieChart(Map<String, Long> subjectDurationMap, Map<String, Integer> subjectColorMap) {
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        List<Integer> colors = new ArrayList<>();
+        float totalDuration = 0;
+
+        for(Long duration : subjectDurationMap.values()){
+            totalDuration+=duration;
+        }
+
+        for (Map.Entry<String, Long> entry : subjectDurationMap.entrySet()) {
+            String subject = entry.getKey();
+            float percentage = (entry.getValue() / totalDuration) * 100;
+            entries.add(new PieEntry(percentage, subject)); // 퍼센트 사용
+            colors.add(subjectColorMap.getOrDefault(subject, Color.GRAY));
+        }
+
+        PieDataSet dataSet = new PieDataSet(entries, "과목별 학습 시간");
+        dataSet.setColors(colors); // subject별 색상 설정
+        dataSet.setValueTextSize(12f);
+
+        PieData data = new PieData(dataSet);
+
+        // 파이 차트 설정
+        binding.pieChart.setData(data);
+        binding.pieChart.setCenterText("과목별 학습 시간");
+        binding.pieChart.setCenterTextSize(12f);
+        binding.pieChart.getDescription().setEnabled(false); // 설명 제거
+        binding.pieChart.getLegend().setEnabled(false);
+        binding.pieChart.animateY(1000); // 애니메이션
+        binding.pieChart.invalidate(); // 갱신
+    }
+
 }

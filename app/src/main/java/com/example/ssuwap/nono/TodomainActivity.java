@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ssuwap.R;
 import com.example.ssuwap.data.todolist.TodolistData;
-import com.example.ssuwap.data.todolist.TodotimeDBHelper;
 import com.example.ssuwap.databinding.ActivityTodomainBinding;
 import com.example.ssuwap.ui.todolist.TodomainAdapter;
 

@@ -1,4 +1,4 @@
-package com.example.ssuwap.data.todolist;
+package com.example.ssuwap.nono;
 
 import android.content.ContentValues;
 import android.content.Context;

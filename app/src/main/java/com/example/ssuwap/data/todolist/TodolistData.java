@@ -1,8 +1,5 @@
 package com.example.ssuwap.data.todolist;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TodolistData {
 
     private String key;
