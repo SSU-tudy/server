@@ -33,8 +33,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -409,31 +407,40 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         else{
             stopTimer();
             calculateTotalTimeFromDB();
+            //비동기식이라 그냥 딜레이 줘버림
+            new Handler().postDelayed(() -> {
+                fetchPieChart(); // 파이 차트 생성
+            }, 1000);
             fetchPieChart();
         }
     }
     private void fetchPieChart() {
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        // 오늘 날짜 계산
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH는 0부터 시작하므로 +1
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // 오늘 날짜에 해당하는 경로로 데이터베이스 참조
+        DatabaseReference todayRef = databaseReference.child(String.valueOf(year))
+                .child(String.valueOf(month))
+                .child(String.valueOf(day));
+
+        todayRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Map<String, Long> subjectDurationMap = new HashMap<>();
                 Map<String, Integer> subjectColorMap = new HashMap<>();
 
-                for (DataSnapshot yearSnapshot : snapshot.getChildren()) {
-                    for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
-                        for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) {
-                            for (DataSnapshot taskSnapshot : daySnapshot.getChildren()) {
-                                String subject = taskSnapshot.child("subject").getValue(String.class);
-                                Long duration = taskSnapshot.child("totalDuration").getValue(Long.class);
-                                String colorHex = taskSnapshot.child("color").getValue(String.class);
+                for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
+                    String subject = taskSnapshot.child("subject").getValue(String.class);
+                    Long duration = taskSnapshot.child("totalDuration").getValue(Long.class);
+                    String colorHex = taskSnapshot.child("color").getValue(String.class);
 
-                                if (subject != null && duration != null && colorHex != null) {
-                                    subjectDurationMap.put(subject,
-                                            subjectDurationMap.getOrDefault(subject, 0L) + duration);
-                                    subjectColorMap.putIfAbsent(subject, Color.parseColor(colorHex));
-                                }
-                            }
-                        }
+                    if (subject != null && duration != null && colorHex != null) {
+                        subjectDurationMap.put(subject,
+                                subjectDurationMap.getOrDefault(subject, 0L) + duration);
+                        subjectColorMap.putIfAbsent(subject, Color.parseColor(colorHex));
                     }
                 }
 
@@ -447,6 +454,7 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
             }
         });
     }
+
 
     private void createPieChart(Map<String, Long> subjectDurationMap, Map<String, Integer> subjectColorMap) {
         ArrayList<PieEntry> entries = new ArrayList<>();

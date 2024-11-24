@@ -36,7 +36,12 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.android.material:material:1.11.0")
+    implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation ("com.prolificinteractive:material-calendarview:1.4.3")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+
 
     implementation(libs.photoview)
 
