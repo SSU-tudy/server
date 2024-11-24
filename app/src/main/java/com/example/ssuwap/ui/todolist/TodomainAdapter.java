@@ -98,7 +98,6 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
                 // 현재 아이템 시작
                 startTime = System.currentTimeMillis();
                 item.setPlaying(true);
-                //holder.binding.btnTodo.setBackgroundResource(R.drawable.pause);
                 playingPosition = item.getKey();
 
                 if (signalRunningListener != null) {
@@ -131,10 +130,6 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
                 .setPositiveButton("확인", (dialogInterface, i) -> {
 
                     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
-                    if(signalRunningListener != null){
-                        signalRunningListener.onRunningStateChanged(item, false);
-                        Log.d("Timer", "onRunningStateChanged(item, false)");
-                    }
                     Toast.makeText(context, "공부시간이 기록되었습니다.", Toast.LENGTH_SHORT).show();
 
                     updateButtonAppearance(holder, item);
@@ -157,9 +152,13 @@ public class TodomainAdapter extends RecyclerView.Adapter<TodomainAdapter.MyView
                     if (listener != null) {
                         listener.onTimeBlockSelected(startHour, startMinute, endHour, endMinute, item.getColor());
                     }
-
                     // TimeInfo에 세션 기록 추가
                     addSessionToFirebase(item.getKey(), startTime, endTime);
+
+                    if(signalRunningListener != null){
+                        signalRunningListener.onRunningStateChanged(item, false);
+                        Log.d("Timer", "onRunningStateChanged(item, false)");
+                    }
                 })
                 .setNegativeButton("취소", null)
                 .create()
