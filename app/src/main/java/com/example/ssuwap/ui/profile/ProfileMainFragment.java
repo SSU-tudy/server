@@ -87,6 +87,10 @@ public class ProfileMainFragment extends Fragment {
         });
         binding.btnMyPosts.setOnClickListener(v -> {
             // 내가 쓴 글 이동 로직
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, ProfilePostFragment.newInstance("param1", "param2"))
+                    .addToBackStack(null)
+                    .commit();
         });
         binding.btnStudyRecords.setOnClickListener(v -> {
             // 공부 기록 이동 로직
