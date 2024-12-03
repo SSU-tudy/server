@@ -53,6 +53,7 @@
             </LinearLayout>
         </ScrollView>
         <Button
+            android:id="@+id/btn_goToChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="구매하러가기"

@@ -87,7 +87,7 @@ public class SignupActivity extends AppCompatActivity {
         binding.btnCompleteSignup.setOnClickListener(view -> {
             String email = binding.etCompleteEmail.getText().toString().trim();
             String password = binding.etCompletePassword.getText().toString().trim();
-            String studentName = binding.etStudentName.getText().toString().trim();
+            String studentName = binding.etStudentName.getText().toString();
             String grade = binding.spinnerCompleteGrade.getSelectedItem().toString();
             String semester = binding.spinnerCompleteSemester.getSelectedItem().toString();
             String department = binding.spinnerCompleteDepartment.getSelectedItem().toString();
@@ -125,7 +125,6 @@ public class SignupActivity extends AppCompatActivity {
         userInfo.put("grade", grade);
         userInfo.put("semester", semester);
         userInfo.put("department", department);
-        // 비밀번호는 Firebase Authentication에서 안전하게 관리하므로, Realtime Database에 저장하지 않습니다.
 
         databaseReference.child(uid).setValue(userInfo)
                 .addOnCompleteListener(task -> {
