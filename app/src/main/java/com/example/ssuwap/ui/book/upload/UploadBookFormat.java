@@ -16,9 +16,11 @@ import com.bumptech.glide.Glide;
 import com.example.ssuwap.R;
 import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.ActivityUploadBookFormatBinding;
+import com.example.ssuwap.ui.book.buying.chat.ChatActivity;
 import com.example.ssuwap.ui.book.upload.isbn.NaverBookInfoFetcher;
 import com.example.ssuwap.ui.book.upload.isbn.UploadBookScan;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,6 +39,7 @@ public class UploadBookFormat extends AppCompatActivity {
     private String authorBook;
     private String publisherBook;
     private String imageUrlBook;
+    private String myName;
     private int timeUpload;
 
     private FirebaseAuth mFirebaseAuth;     // FB 인증
@@ -130,7 +133,19 @@ public class UploadBookFormat extends AppCompatActivity {
             String description = binding.detailInfoBook.getText().toString(); Log.d("UploadBookFormatCheck", description);
             long time = System.currentTimeMillis();
 
-            BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price, time);
+            // uploader 얻기
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("studentName");
+            userRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String userId = task.getResult().getValue(String.class);
+                    if (userId != null) {
+                        myName = userId;
+                    }
+                }
+            });
+
+            BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price, time, false, myName);
             mDatabaseRef.push().setValue(book)
                     .addOnSuccessListener(aVoid -> Toast.makeText(this, "업로드 성공", Toast.LENGTH_SHORT).show())
                     .addOnFailureListener(e -> Toast.makeText(this, "업로드 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show());
