@@ -1,8 +1,10 @@
-package com.example.ssuwap.data.calendar;
+package com.example.ssuwap.ui.profile.calander;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.style.LineBackgroundSpan;
+
+import com.example.ssuwap.data.calendar.SubjectData;
 
 import java.util.List;
 

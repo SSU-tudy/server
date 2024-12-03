@@ -1,16 +1,19 @@
-package com.example.ssuwap.data.calendar;
+package com.example.ssuwap.ui.profile.calander;
 
 import android.util.Log;
 
+import com.example.ssuwap.data.calendar.SubjectData;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 
 
 import java.util.List;
-import java.util.Map;
 
 public class LineDecorator implements DayViewDecorator {
+
+
+
     private CalendarDay day;
     private List<SubjectData> subject;
     public LineDecorator(CalendarDay day, List<SubjectData> dataMap) {
