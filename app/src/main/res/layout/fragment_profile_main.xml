@@ -1,15 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.ProfileMainFragment">
+    android:background="@color/white"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="프로필 화면이여유"
-        android:layout_gravity="center"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <!-- 사용자 정보 섹션 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/iv_profile_picture"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_launcher_background"
+                android:background="@drawable/circle"
+                android:scaleType="centerCrop"
+                android:layout_marginEnd="16dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="홍길동"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_user_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="컴퓨터학부 | 2학년 2학기"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 태그 Recyclerview -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="관련 태그"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal" />
+
+        <!-- 내 활동 섹션 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내 활동"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_sales_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="판매 내역"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btn_my_posts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="내가 쓴 글"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btn_study_records"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="공부 기록"
+            android:layout_marginTop="8dp" />
+
+        <!-- 시간표 추가 섹션 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시간표 추가"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_subject_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="과목명"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/et_subject_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="수업 요일 (예: 월요일)"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/et_subject_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="수업 시작 시간 (예: 09:00)"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/et_subject_end_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="수업 끝나는 시간 (예: 10:30)"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btn_add_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="시간표 추가"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</ScrollView>

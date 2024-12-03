@@ -35,11 +35,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SellingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SellingFragment extends Fragment {
     private RecyclerView recyclerView;
     private SellingAdaptor adapter;
