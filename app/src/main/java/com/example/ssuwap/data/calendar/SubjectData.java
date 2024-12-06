@@ -3,10 +3,20 @@ package com.example.ssuwap.data.calendar;
 public class SubjectData {
     int color;
     float totalDuration;
+    String subject;
 
-    public SubjectData(int color, float totalDuration) {
+    public SubjectData(int color, float totalDuration, String subject) {
         this.color = color;
         this.totalDuration = totalDuration;
+        this.subject = subject;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public int getColor() {

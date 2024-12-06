@@ -1,9 +1,11 @@
 package com.example.ssuwap.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import com.example.ssuwap.R;
 import com.example.ssuwap.data.user.Subject;
 import com.example.ssuwap.data.user.UserAccount;
 import com.example.ssuwap.databinding.FragmentProfileMainBinding;
+import com.example.ssuwap.ui.profile.calander.CalendarActivity;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -73,6 +76,7 @@ public class ProfileMainFragment extends Fragment {
         setupUserProfile();
         setupTimetableBottomSheet();
         setupActivityButtons();
+
     }
 
     private void setupUserProfile() {
@@ -94,6 +98,7 @@ public class ProfileMainFragment extends Fragment {
         });
         binding.btnStudyRecords.setOnClickListener(v -> {
             // 공부 기록 이동 로직
+            startActivity(new Intent(requireActivity(), CalendarActivity.class));
         });
     }
 }
