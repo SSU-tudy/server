@@ -18,21 +18,22 @@
         android:layout_height="match_parent"
         android:layout_below="@id/calendarView"
         android:orientation="horizontal">
-        <!-- 탐테-->
-        <ScrollView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="16dp"
+        <!-- 시간 텍스트 영역 -->
+        <LinearLayout
+            android:id="@+id/timeTextLayout"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            xmlns:android="http://schemas.android.com/apk/res/android">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/timetableContainer"
+        </LinearLayout>
+
+        <!-- 그래프 영역 -->
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp" />
-        </ScrollView>
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
         <!--bar-->
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/barChart"

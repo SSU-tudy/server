@@ -20,6 +20,7 @@ firebaseAuth = "23.1.0"
 firebaseDatabase = "21.0.0"
 firebase-storage-version = "19.2.0"
 photoview = "2.3.0"
+coordinatorlayout = "1.2.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -41,6 +42,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-storage = { module = "com.google.firebase:firebase-storage", version.ref = "firebase-storage-version" }
 photoview = { group = "com.github.chrisbanes", name = "PhotoView", version.ref = "photoview" }
+coordinatorlayout = { group = "androidx.coordinatorlayout", name = "coordinatorlayout", version.ref = "coordinatorlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
