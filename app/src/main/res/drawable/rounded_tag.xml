@@ -4,10 +4,6 @@
 <solid android:color="#D3EAFF" /> <!-- 원하는 색상으로 변경 -->
 
 <!-- 모서리를 둥글게 설정 -->
-<corners android:radius="16dp" /> <!-- 원하는 둥글기 정도 설정 -->
+<corners android:radius="14dp" /> <!-- 원하는 둥글기 정도 설정 -->
 
-<!-- 테두리가 필요하면 추가 -->
-<stroke
-    android:width="2dp"
-    android:color="#FFFFFF" /> <!-- 테두리 색상과 두께 설정 -->
 </shape>
