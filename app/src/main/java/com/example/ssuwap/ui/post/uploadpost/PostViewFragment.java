@@ -21,6 +21,11 @@ import com.example.ssuwap.data.post.PostInfo;
 import com.example.ssuwap.databinding.FragmentPostViewBinding;
 import com.example.ssuwap.ui.post.uploadpost.comment.CommentAdaptor;
 import com.example.ssuwap.ui.post.uploadpost.comment.UploadCommentFormat;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -40,6 +45,9 @@ public class PostViewFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "PostViewFragment";
     private static final String ARG_POST_INFO = "PostInfo";
+
+    private ArrayList<CommentInfo> list;  // 댓글 리스트 선언
+    private CommentAdaptor adaptor;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -98,7 +106,7 @@ public class PostViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        loadFirebaseData();
 
         if (postInfo != null) {
             // 전달된 postInfo 객체의 URL과 설명을 로그로 출력
@@ -114,9 +122,11 @@ public class PostViewFragment extends Fragment {
             binding.postViewText.setText(postInfo.getDescription());  // 설명 텍스트 설정
 
             // Comments를 가져와서 RecyclerView에 설정
-            ArrayList<CommentInfo> comments = postInfo.getCommentsList(); // commentsList 가져오기
+            list = new ArrayList<>();  // 댓글 리스트 초기화
+            adaptor = new CommentAdaptor(requireContext(), list);  // 어댑터 초기화
+
             binding.commentRV.setLayoutManager(new LinearLayoutManager(requireContext()));
-            binding.commentRV.setAdapter(new CommentAdaptor(requireContext(), comments));
+            binding.commentRV.setAdapter(adaptor);
 
         } else {
             // postInfo가 null인 경우 로깅
@@ -143,4 +153,48 @@ public class PostViewFragment extends Fragment {
             }
         });
     }
+
+    private void loadFirebaseData() {
+        Log.d("PostMainActivity", "loadFirebaseData()");
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = database.getReference("PostInfo").child(postInfo.getPostID()).child("comments");
+
+        databaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // 새 댓글이 추가될 때마다 호출됩니다.
+                CommentInfo commentInfo = dataSnapshot.getValue(CommentInfo.class);
+                if (commentInfo != null) {
+                    list.add(commentInfo);  // 새로운 댓글을 리스트에 추가
+                    adaptor.notifyItemInserted(list.size() - 1);  // 어댑터에 추가된 아이템을 알려줍니다.
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // 댓글이 변경될 때마다 호출됩니다.
+                CommentInfo commentInfo = dataSnapshot.getValue(CommentInfo.class);
+                if (commentInfo != null) {
+                    // 기존 댓글을 업데이트하는 로직을 추가할 수 있습니다.
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                // 댓글이 삭제될 때마다 호출됩니다.
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // 댓글의 순서가 변경될 때마다 호출됩니다.
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("PostMainActivity", "Firebase error: " + databaseError.toException());
+            }
+        });
+    }
+
 }

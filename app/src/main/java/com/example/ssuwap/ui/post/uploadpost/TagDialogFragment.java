@@ -16,10 +16,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.ssuwap.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class TagDialogFragment extends DialogFragment {
 
@@ -108,7 +104,7 @@ public class TagDialogFragment extends DialogFragment {
 
             @Override
             public void onNothingSelected(android.widget.AdapterView<?> parent) {
-                // 아무것도 선택되지 않았을 때 처리 (필요 시)
+                //선택X
             }
         });
 
