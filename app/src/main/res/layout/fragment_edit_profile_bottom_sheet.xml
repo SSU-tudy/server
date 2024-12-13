@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="이름" />
+
+    <EditText
+        android:id="@+id/et_grade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="학년" />
+
+    <EditText
+        android:id="@+id/et_semester"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="학기" />
+
+    <EditText
+        android:id="@+id/et_department"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="학과" />
+
+    <Button
+        android:id="@+id/btn_save_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="저장"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

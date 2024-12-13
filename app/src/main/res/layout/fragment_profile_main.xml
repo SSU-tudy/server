@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:padding="16dp">
 
@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- 사용자 정보 섹션 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,9 +27,10 @@
                 android:layout_marginEnd="16dp" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/tv_user_name"
@@ -47,9 +47,18 @@
                     android:text="컴퓨터학부 | 2학년 2학기"
                     android:textSize="14sp" />
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- 태그 Recyclerview -->
+            <!-- 프로필 수정 버튼 -->
+            <Button
+                android:id="@+id/btn_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="수정"
+                android:textSize="12sp"
+                android:padding="8dp"
+                android:textColor="@color/white" />
+        </LinearLayout>
+        <!-- 태그 섹션 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,8 +71,8 @@
             android:id="@+id/rv_tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp" />
 
         <!-- 내 활동 섹션 -->
         <TextView
@@ -95,48 +104,37 @@
             android:text="공부 기록"
             android:layout_marginTop="8dp" />
 
-        <!-- 시간표 추가 섹션 -->
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="시간표 추가"
+            android:orientation="horizontal"
             android:layout_marginTop="16dp"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:gravity="center_vertical">
 
-        <EditText
-            android:id="@+id/et_subject_name"
+            <TextView
+                android:id="@+id/tv_timetable_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="2024 - 2학기 시간표"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_add_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="과목 추가하기" />
+        </LinearLayout>
+
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/grid_timetable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="과목명"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            app:columnCount="6"
+            app:rowCount="13">
+        </androidx.gridlayout.widget.GridLayout>
 
-        <EditText
-            android:id="@+id/et_subject_day"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="수업 요일 (예: 월요일)"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/et_subject_start_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="수업 시작 시간 (예: 09:00)"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/et_subject_end_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="수업 끝나는 시간 (예: 10:30)"
-            android:layout_marginTop="8dp" />
-
-        <Button
-            android:id="@+id/btn_add_subject"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="시간표 추가"
-            android:layout_marginTop="8dp" />
     </LinearLayout>
 </ScrollView>
