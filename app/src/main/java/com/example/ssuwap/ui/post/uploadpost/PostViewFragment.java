@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,6 +120,7 @@ public class PostViewFragment extends Fragment {
                     .into(binding.postViewImage);  // ImageView에 이미지 로드
 
             // TextView에 설명 설정
+            binding.postViewText.setMovementMethod(new ScrollingMovementMethod());
             binding.postViewText.setText(postInfo.getDescription());  // 설명 텍스트 설정
 
             // Comments를 가져와서 RecyclerView에 설정

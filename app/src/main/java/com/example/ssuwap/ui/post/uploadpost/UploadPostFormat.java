@@ -117,6 +117,9 @@ public class UploadPostFormat extends AppCompatActivity implements TagDialogFrag
         getUserInfoForFirebase();
         if(tagList == null) tagList = new ArrayList<>();
 
+        binding.postTag1.setVisibility(View.GONE);
+        binding.postTag2.setVisibility(View.GONE);
+        binding.postTag3.setVisibility(View.GONE);
         binding.uploadPostButton.setEnabled(false);
 
 
@@ -155,7 +158,7 @@ public class UploadPostFormat extends AppCompatActivity implements TagDialogFrag
         binding.addTagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TagDialogFragment dialog = TagDialogFragment.newInstance("1학기");
+                TagDialogFragment dialog = TagDialogFragment.newInstance(userSemester);
                 dialog.show(getSupportFragmentManager(), "TagDialog");
             }
         });
@@ -280,6 +283,11 @@ public class UploadPostFormat extends AppCompatActivity implements TagDialogFrag
         tagList.add(grade);
         tagList.add(userSemester);
         tagList.add(subject);
+
+        binding.initialText.setVisibility(View.GONE);
+        binding.postTag1.setVisibility(View.VISIBLE);
+        binding.postTag2.setVisibility(View.VISIBLE);
+        binding.postTag3.setVisibility(View.VISIBLE);
 
         binding.postTag1.setText(grade);
         binding.postTag2.setText(userSemester);
