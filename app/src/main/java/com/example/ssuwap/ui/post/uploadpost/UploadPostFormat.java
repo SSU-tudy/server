@@ -33,6 +33,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.exifinterface.media.ExifInterface;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.example.ssuwap.R;
@@ -60,7 +62,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-public class UploadPostFormat extends AppCompatActivity {
+public class UploadPostFormat extends AppCompatActivity implements TagDialogFragment.TagDialogListener{
+
+    private static final String TAG = "UploadPostFormat";
 
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
@@ -68,6 +72,9 @@ public class UploadPostFormat extends AppCompatActivity {
     private String photoURL;
     private Bitmap imageBitmap;
     private String userName;
+    private String userSemester;
+    private ArrayList<String> tagList;
+
 
     private ActivityUploadPostFormatBinding binding;
 
@@ -107,7 +114,11 @@ public class UploadPostFormat extends AppCompatActivity {
             }
         });
 
-        getUserNameForFirebase();
+        getUserInfoForFirebase();
+        if(tagList == null) tagList = new ArrayList<>();
+
+        binding.uploadPostButton.setEnabled(false);
+
 
         //firebase에 저장할 경로 입력 : 여기서는 PostInfo라는 곳에 업로드를 할예정
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("PostInfo");
@@ -118,12 +129,15 @@ public class UploadPostFormat extends AppCompatActivity {
                 String detailPost = binding.postDetailInfo.getText().toString();
                 Log.d("UploadPostFormat", "detailPost : " + detailPost);
                 Log.d("UploadPostFormat", "URL : " + photoURL);
+                Log.d(TAG, "Tag1 : " + tagList.get(0));
+                Log.d(TAG, "Tag2 : " + tagList.get(1));
+                Log.d(TAG, "Tag3 : " + tagList.get(2));
 
                 DatabaseReference postRef = databaseReference.push();
                 String postId = postRef.getKey();  // 자동 생성된 ID 가져오기
                 Log.d("UploadPostFormat", "name : " + userName);
                 //서버로 올릴 데이터 객체로 포장
-                PostInfo postInfo = new PostInfo(userName, postId ,photoURL, detailPost, new HashMap<>());
+                PostInfo postInfo = new PostInfo(userName, postId ,photoURL, detailPost, tagList.get(0), tagList.get(1), tagList.get(2),new HashMap<>());
 
                 //위에서 저장한 경로에 올린다.
                 postRef.setValue(postInfo).addOnCompleteListener(task -> {
@@ -138,9 +152,17 @@ public class UploadPostFormat extends AppCompatActivity {
         });
 
 
+        binding.addTagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TagDialogFragment dialog = TagDialogFragment.newInstance("1학기");
+                dialog.show(getSupportFragmentManager(), "TagDialog");
+            }
+        });
+
     }
 
-    private void getUserNameForFirebase(){
+    private void getUserInfoForFirebase(){
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
@@ -151,11 +173,27 @@ public class UploadPostFormat extends AppCompatActivity {
                     String userId = task.getResult().getValue(String.class);
                     if (userId != null) {
                         userName = userId;
+                        Log.d("UploadPostFormat", userName);
                     } else {
                         Log.d("UploadPostFormat", "User ID가 존재하지 않습니다.");
                     }
                 } else {
                     Log.d("UploadPostFormat", "User ID 가져오기 실패.");
+                }
+            });
+
+            userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("semester");
+            userRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String userSem = task.getResult().getValue(String.class);
+                    if (userSem != null) {
+                        userSemester = userSem;
+                        Log.d(TAG, userSemester);
+                    } else {
+                        Log.d(TAG, "User Semester가 존재하지 않습니다.");
+                    }
+                } else {
+                    Log.d(TAG, "User Semester 가져오기 실패.");
                 }
             });
         }
@@ -234,5 +272,20 @@ public class UploadPostFormat extends AppCompatActivity {
         }).addOnFailureListener(e -> {
             Log.e("UploadPostFormat", "Image upload failed", e);
         });
+    }
+
+    @Override
+    public void onTagSelected(String grade, String subject) {
+
+        tagList.add(grade);
+        tagList.add(userSemester);
+        tagList.add(subject);
+
+        binding.postTag1.setText(grade);
+        binding.postTag2.setText(userSemester);
+        binding.postTag3.setText(subject);
+
+        // 태그 리스트 크기에 따라 버튼 상태 업데이트
+        binding.uploadPostButton.setEnabled(tagList.size() >= 3);
     }
 }

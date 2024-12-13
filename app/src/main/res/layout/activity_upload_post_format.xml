@@ -38,45 +38,72 @@
                 />
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "태그 들어가용"
-            android:gravity="center"/>
+            >
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:background="#696969"/>
+            <Button
+                android:id="@+id/addTagButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/baseline_add_24"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text = "질문할 내용을 적어주세요"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"/>
+            <TextView
+                android:id="@+id/postTag1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="plus 버튼을 눌러 태그를 선택해주세요"
+                />
 
-        <EditText
-            android:id="@+id/postDetailInfo"
+            <TextView
+                android:id="@+id/postTag2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                />
+
+            <TextView
+                android:id="@+id/postTag3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="390dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/custom_edittext"/>
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text = "질문할 내용을 적어주세요"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/postDetailInfo"
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/custom_edittext"/>
+        </FrameLayout>
 
         <com.google.android.material.button.MaterialButton
-        android:id="@+id/uploadPostButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="end"
-        android:layout_margin="4dp"
-        android:text="질문 올리기"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-
+            android:id="@+id/uploadPostButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="4dp"
+            android:text="질문 올리기"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

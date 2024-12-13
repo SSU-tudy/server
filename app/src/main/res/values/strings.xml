@@ -6,13 +6,6 @@
     <string name="Upper_Buying">구매창</string>
     <string name="exLongtext"> 그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요그만하고싶다 그만하고싶다 팔아요 사요 안사요 그만살래요</string>
 
-    <string-array name="grades">
-        <item>1학년</item>
-        <item>2학년</item>
-        <item>3학년</item>
-        <item>4학년</item>
-    </string-array>
-
     <string-array name="term">
         <item>1학기</item>
         <item>2학기</item>
@@ -25,7 +18,86 @@
         <item>데이터분석및실습</item>
         <item>알고리즘</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="grades">
+        <item>1학년</item>
+        <item>2학년</item>
+        <item>3학년</item>
+        <item>4학년</item>
+    </string-array>
+
+    <string-array name="subject_1_1">
+        <item>컴퓨터수학1</item>
+        <item>파이썬프로그래밍 및 실습</item>
+        <item>컴퓨터학개론</item>
+        <item>컴퓨터미적분 활용</item>
+    </string-array>
+
+    <string-array name="subject_1_2">
+        <item>컴퓨터수학2</item>
+        <item>C프로그래밍 및 실습</item>
+        <item>컴퓨터시스템 기초설계</item>
+        <item>컴퓨터공학 응용기초</item>
+    </string-array>
+
+    <string-array name="subject_2_1">
+        <item>자료구조</item>
+        <item>선형대수</item>
+        <item>어셈블리 프로그래밍</item>
+        <item>객체지향 프로그래밍</item>
+        <item>논리회로설계 및 실험</item>
+        <item>확률 및 통계</item>
+    </string-array>
+
+    <string-array name="subject_2_2">
+        <item>컴퓨터구조</item>
+        <item>알고리즘</item>
+        <item>형식언어 및 오토마타</item>
+        <item>데이터분석 및 실습</item>
+        <item>사용자인터페이스 및 실습</item>
+        <item>컴퓨터네트워크</item>
+    </string-array>
+
+    <string-array name="subject_3_1">
+        <item>프로그래밍언어</item>
+        <item>파일처리</item>
+        <item>문제해결</item>
+        <item>시스템프로그래밍</item>
+        <item>지능형시스템</item>
+        <item>네트워크프로그래밍</item>
+        <item>리눅스시스템프로그래밍</item>
+        <item>소프트웨어공학</item>
+    </string-array>
+
+    <string-array name="subject_3_2">
+        <item>운영체제</item>
+        <item>데이터베이스</item>
+        <item>컴파일러</item>
+        <item>임베디드시스템구조</item>
+        <item>인공지능</item>
+        <item>정보보안</item>
+        <item>컴퓨터비전</item>
+        <item>웹프로그래밍설계 및 실습</item>
+    </string-array>
+
+    <string-array name="subject_4_1">
+        <item>전공종합설계1</item>
+        <item>임베디드시스템소프트웨어</item>
+        <item>데이터베이스응용</item>
+        <item>머신러닝</item>
+        <item>컴퓨터그래픽스</item>
+        <item>정보기술세미나1</item>
+        <item>컴퓨터공학특강1</item>
+        <item>컴퓨터비전응용</item>
+    </string-array>
+
+    <string-array name="subject_4_2">
+        <item>전공종합설계2</item>
+        <item>모바일네트워크</item>
+        <item>분산 및 병렬처리컴퓨팅</item>
+        <item>딥러닝</item>
+        <item>정보기술세미나2</item>
+        <item>컴퓨터공학특강2</item>
+    </string-array>
 
 </resources>
