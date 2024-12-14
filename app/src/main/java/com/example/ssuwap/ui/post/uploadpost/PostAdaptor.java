@@ -55,6 +55,10 @@ public class PostAdaptor extends RecyclerView.Adapter<PostAdaptor.PostViewHolder
         Log.d("PostAdaptor", "image check : " + postInfo.getImageUrl());
         Log.d("PostAdaptor", "post check : " + postInfo.getDescription());
 
+        holder.binding.postTag1.setText(postInfo.getPostTag1());
+        holder.binding.postTag2.setText(postInfo.getPostTag2());
+        holder.binding.postTag3.setText(postInfo.getPostTag3());
+
         holder.binding.postView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

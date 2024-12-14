@@ -10,13 +10,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/postTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="태그들어가용"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="5dp"
-            android:textSize="16sp" />
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/postTag1"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:paddingStart="3dp"
+                android:paddingEnd="3dp"
+                android:background="@drawable/rounded_tag"
+                />
+
+            <TextView
+                android:id="@+id/postTag2"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:paddingStart="3dp"
+                android:paddingEnd="3dp"
+                android:background="@drawable/rounded_tag"
+                />
+
+            <TextView
+                android:id="@+id/postTag3"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:paddingStart="3dp"
+                android:paddingEnd="3dp"
+                android:background="@drawable/rounded_tag"
+                />
+        </LinearLayout>
 
         <View
             android:background="#696969"
@@ -37,14 +82,15 @@
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp" />
 
-            <TextView
-                android:id="@+id/postText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                <TextView
+                    android:id="@+id/postText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="150dp"
+                    android:text=""
+                    android:layout_marginStart="10dp"
+                    android:textSize="16sp" />
 
-                android:text="설명"
-                android:layout_marginStart="10dp"
-                android:textSize="16sp" />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -54,6 +100,9 @@
             android:background="#696969"/>
 
         <LinearLayout
+            android:id="@+id/postView"
+            android:clickable="true"
+            android:focusable="true"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginEnd="5dp"
@@ -72,7 +121,6 @@
                 android:layout_weight="1"/>
 
             <Button
-                android:id="@+id/postView"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
