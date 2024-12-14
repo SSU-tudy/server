@@ -99,5 +99,7 @@
         <item>정보기술세미나2</item>
         <item>컴퓨터공학특강2</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -20,6 +20,16 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class AddSubjectBottomSheet extends BottomSheetDialogFragment {
 
+    public interface SubjectAddedListener {
+        void onSubjectAdded(Subject subject);
+    }
+
+    private SubjectAddedListener listener;
+
+    public void setSubjectAddedListener(SubjectAddedListener listener) {
+        this.listener = listener;
+    }
+
     public AddSubjectBottomSheet() {
         // Required empty public constructor
     }
@@ -38,13 +48,13 @@ public class AddSubjectBottomSheet extends BottomSheetDialogFragment {
         EditText etEndTime = view.findViewById(R.id.et_subject_end_time);
 
         view.findViewById(R.id.btn_save_subject).setOnClickListener(v -> {
-            String subjectName = etSubjectName.getText().toString();
-            String grade = etSubjectGrade.getText().toString();
-            String semester = etSubjectSemester.getText().toString();
-            String department = etSubjectDepartment.getText().toString();
-            String day = etDay.getText().toString();
-            String startTime = etStartTime.getText().toString();
-            String endTime = etEndTime.getText().toString();
+            String subjectName = etSubjectName.getText().toString().trim();
+            String grade = etSubjectGrade.getText().toString().trim();
+            String semester = etSubjectSemester.getText().toString().trim();
+            String department = etSubjectDepartment.getText().toString().trim();
+            String day = etDay.getText().toString().trim();
+            String startTime = etStartTime.getText().toString().trim();
+            String endTime = etEndTime.getText().toString().trim();
 
             if (TextUtils.isEmpty(subjectName) || TextUtils.isEmpty(grade) || TextUtils.isEmpty(semester) ||
                     TextUtils.isEmpty(department) || TextUtils.isEmpty(day) ||
@@ -53,7 +63,13 @@ public class AddSubjectBottomSheet extends BottomSheetDialogFragment {
                 return;
             }
 
-            saveSubjectToDatabase(new Subject(subjectName, grade, semester, department, day, startTime, endTime));
+            Subject subject = new Subject(subjectName, grade, semester, department, day, startTime, endTime);
+
+            saveSubjectToDatabase(subject);
+
+            if (listener != null) {
+                listener.onSubjectAdded(subject);
+            }
         });
 
         return view;
@@ -68,10 +84,12 @@ public class AddSubjectBottomSheet extends BottomSheetDialogFragment {
 
         String key = userSubjectsRef.push().getKey(); // Unique key for the subject
         if (key != null) {
-            userSubjectsRef.child(key).setValue(subject).addOnSuccessListener(aVoid -> {
-                Toast.makeText(getContext(), "과목이 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                dismiss();
-            }).addOnFailureListener(e -> Toast.makeText(getContext(), "과목 추가 실패.", Toast.LENGTH_SHORT).show());
+            userSubjectsRef.child(key).setValue(subject)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(getContext(), "과목이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                        dismiss();
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(getContext(), "과목 추가 실패.", Toast.LENGTH_SHORT).show());
         }
     }
 }

@@ -58,6 +58,7 @@
                 android:padding="8dp"
                 android:textColor="@color/white" />
         </LinearLayout>
+
         <!-- 태그 섹션 -->
         <TextView
             android:layout_width="wrap_content"
@@ -66,7 +67,6 @@
             android:layout_marginTop="16dp"
             android:textSize="16sp"
             android:textStyle="bold" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_tags"
             android:layout_width="match_parent"
@@ -104,6 +104,7 @@
             android:text="공부 기록"
             android:layout_marginTop="8dp" />
 
+        <!-- 타임테이블 제목 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -116,7 +117,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="2024 - 2학기 시간표"
+                android:text="2학년 2학기 시간표"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -127,14 +128,11 @@
                 android:text="과목 추가하기" />
         </LinearLayout>
 
-        <androidx.gridlayout.widget.GridLayout
-            android:id="@+id/grid_timetable"
+        <LinearLayout
+            android:id="@+id/timetable_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:columnCount="6"
-            app:rowCount="13">
-        </androidx.gridlayout.widget.GridLayout>
-
-    </LinearLayout>
+            android:orientation="vertical"
+            android:layout_marginTop="16dp" />
+        </LinearLayout>
 </ScrollView>
