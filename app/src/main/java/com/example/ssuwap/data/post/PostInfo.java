@@ -22,13 +22,16 @@ public class PostInfo implements Parcelable {
     private String postTag3;
     private Map<String, CommentInfo> comments; // Firebase에서 불러올 때 사용하는 Map 형태의 comments 필드
     private ArrayList<CommentInfo> commentsList; // ArrayList 형태로 변환하여 사용할 필드
+    private HashMap<String, Integer> userIndexMap; // 작성자 ID -> 고유 번호 매핑
+    private int nextUserIndex = 1; // 다음 사용자 고유 번호
 
     public PostInfo() {
         comments = new HashMap<>();
         commentsList = new ArrayList<>();
+        userIndexMap = new HashMap<>();
     }
 
-    public PostInfo(String userInfoId,String userName,String postID, String imageUrl, String description, String postTag1, String postTag2, String postTag3, Map<String, CommentInfo> comments) {
+    public PostInfo(String userInfoId,String userName,String postID, String imageUrl, String description, String postTag1, String postTag2, String postTag3, Map<String, CommentInfo> comments, HashMap<String, Integer> userIndexMap) {
         this.userInfoId = userInfoId;
         this.userName = userName;
         this.postID = postID;
@@ -39,6 +42,7 @@ public class PostInfo implements Parcelable {
         this.postTag3 = postTag3;
         this.comments = comments;
         this.commentsList = new ArrayList<>(comments.values()); // Map을 ArrayList로 변환
+        this.userIndexMap = new HashMap<>();
     }
 
     protected PostInfo(Parcel in) {
@@ -77,6 +81,23 @@ public class PostInfo implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    // 작성자 ID로 고유 번호를 가져오거나 새로 생성
+    public int getUserIndex(String userInfoId) {
+        if (!userIndexMap.containsKey(userInfoId)) {
+            userIndexMap.put(userInfoId, nextUserIndex++);
+        }
+        return userIndexMap.get(userInfoId);
+    }
+
+    // Getter와 Setter
+    public HashMap<String, Integer> getUserIndexMap() {
+        return userIndexMap;
+    }
+
+    public void setUserIndexMap(HashMap<String, Integer> userIndexMap) {
+        this.userIndexMap = userIndexMap;
     }
 
     @Override

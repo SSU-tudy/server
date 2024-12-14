@@ -40,7 +40,7 @@ public class CommentAdaptor extends RecyclerView.Adapter<CommentAdaptor.CommentV
                 .load(comment.getCommentImage())
                 .into(holder.binding.commentImage);
         holder.binding.commText.setText(comment.getContent());
-        holder.binding.userName.setText("익명의 답변자"+position);
+        holder.binding.userName.setText("익명의 답변자"+comment.getUserIndex());
 
         holder.binding.commentImage.setOnClickListener(new View.OnClickListener() {
             @Override
