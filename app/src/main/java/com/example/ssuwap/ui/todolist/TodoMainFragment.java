@@ -1,7 +1,11 @@
 package com.example.ssuwap.ui.todolist;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -260,6 +265,87 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
                 });
     }
 
+    public class GridPatternView extends View {
+
+        private Paint paint;
+
+        public GridPatternView(Context context) {
+            super(context);
+            init();
+        }
+
+        public GridPatternView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            init();
+        }
+
+        private void init() {
+            paint = new Paint();
+            paint.setColor(Color.LTGRAY);  // 연한 회색 선
+            paint.setStrokeWidth(1);       // 선 굵기
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+
+            int width = getWidth();    // View의 전체 너비
+            int height = getHeight();  // View의 전체 높이
+
+            // 여백 설정
+            int leftMargin = 80;  // 숫자 영역에 대한 여백
+            int totalRows = 24;   // 24시간 기준 (가로선 개수)
+            int totalColumns = 6; // 6등분 기준 (세로선 개수)
+
+            Paint paint = new Paint();
+            paint.setAntiAlias(true);
+
+            // ============================
+            // 1. 색칠된 블록 먼저 그리기
+            // ============================
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.argb(150, 100, 150, 255)); // 반투명 블록 색상
+            float rowHeight = height / (float) totalRows;
+            float columnWidth = (width - leftMargin) / (float) totalColumns;
+
+            for (int row = 5; row <= 7; row++) { // 예시: 특정 시간대 블록 색칠 (5~7시)
+                for (int col = 1; col <= 2; col++) { // 예시: 특정 컬럼
+                    float left = leftMargin + col * columnWidth;
+                    float top = row * rowHeight;
+                    float right = left + columnWidth;
+                    float bottom = top + rowHeight;
+                    canvas.drawRect(left, top, right, bottom, paint); // 색칠된 블록
+                }
+            }
+
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setColor(Color.LTGRAY); // 선 색상
+            paint.setStrokeWidth(1);
+
+            for (int i = 0; i <= totalRows; i++) {
+                float y = i * rowHeight; // 정확한 블록 경계선에 위치
+                canvas.drawLine(leftMargin, y, width, y, paint); // 가로선
+            }
+
+            for (int i = 0; i <= totalColumns; i++) {
+                float x = leftMargin + i * columnWidth;
+                canvas.drawLine(x, 0, x, height, paint); // 세로선
+            }
+
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.BLACK); // 숫자 색상
+            paint.setTextSize(30);
+
+            for (int i = 0; i < totalRows; i++) {
+                float y = i * rowHeight + (rowHeight / 2) + 10; // 중앙정렬 보정
+                canvas.drawText(String.format("%02d", i), 10, y, paint); // 왼쪽에 시간 그리기
+            }
+        }
+
+
+    }
+
+
     private void initTimetable() {
         for (int hour = 0; hour < 24; hour++) {
             // FrameLayout 생성
@@ -271,7 +357,7 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
 
             // 시간 숫자 표시
             TextView hourLabel = new TextView(requireContext());
-            hourLabel.setText(String.format("%02d", hour)); // 예: 15
+            hourLabel.setText(String.format("%02d", hour)); //
             hourLabel.setTextColor(Color.BLACK);
             hourLabel.setTextSize(15);
             hourLabel.setGravity(Gravity.CENTER_VERTICAL);
@@ -294,14 +380,13 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
 
             // 60개의 분 셀 추가
             for (int minute = 0; minute < 60; minute++) {
-                View cell = new View(requireContext());
+                GridPatternView cell = new GridPatternView(requireContext());
                 LinearLayout.LayoutParams cellParams = new LinearLayout.LayoutParams(
                         0, // 너비는 가중치로 균등 분배
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         1 // 가중치
                 );
                 cell.setLayoutParams(cellParams);
-                cell.setBackgroundColor(Color.LTGRAY); // 기본 배경색
                 minuteContainer.addView(cell);
             }
 
@@ -312,7 +397,6 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
             // 타임테이블에 추가
             timetableContainer.addView(hourFrame);
         }
-
     }
     public void onTimeBlockSelected(int startHour, int startMinute, int endHour, int endMinute, int color) {
         colorTimeBlock(startHour, startMinute, endHour, endMinute, color);
