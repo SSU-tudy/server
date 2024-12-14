@@ -4,7 +4,6 @@ public class TodolistData {
 
     private String key;
     private String subject;
-    //private List<Session> sessions;
     private long totalDuration;
     private int color;
     private boolean isPlaying;
@@ -22,8 +21,8 @@ public class TodolistData {
         this.subject = subject;
         this.color = color;
         this.key = key;
-        //this.sessions = new ArrayList<>();
         this.totalDuration = 0;
+        isPlaying = false;
     }
 
     public void setTotalDuration(long totalDuration) {
@@ -46,10 +45,6 @@ public class TodolistData {
         isPlaying = playing;
     }
 
-    public TodolistData() {
-        // Firebase를 위한 기본 생성자
-    }
-
     public String getSubject() {
         return subject;
     }
@@ -58,37 +53,7 @@ public class TodolistData {
         this.subject = subject;
     }
 
-//    public List<Session> getSessions() {
-//        return sessions;
-//    }
-
-//    public void addSession(long startTime, long endTime) {
-//        sessions.add(new Session(startTime, endTime));
-//        totalDuration += (endTime - startTime);
-//    }
-
     public long getTotalDuration() {
         return totalDuration;
-    }
-
-    public static class Session {
-        private long startTime;
-        private long endTime;
-
-        public Session() {
-        }
-
-        public Session(long startTime, long endTime) {
-            this.startTime = startTime;
-            this.endTime = endTime;
-        }
-
-        public long getStartTime() {
-            return startTime;
-        }
-
-        public long getEndTime() {
-            return endTime;
-        }
     }
 }

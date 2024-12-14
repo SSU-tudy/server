@@ -102,8 +102,7 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTodoMainBinding.inflate(inflater, container, false);
 
         // RecyclerView 설정
@@ -112,6 +111,8 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         adapter.setSignalRunningListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
+
+
 
         // 데이터 로드
         loadData();
@@ -346,7 +347,7 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         }
     }
 
-    private void startTimer(long initialTotalTime) {
+    private long startTimer(long initialTotalTime) {
         stopTimer();
         handler = new Handler();
         totalTime = initialTotalTime; // DB에서 계산된 초기 totalTime 사용
@@ -361,6 +362,7 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         };
         Log.d("Timer", "startTimer");
         handler.post(timerRunnable);
+        return totalTime;
     }
 
     private void updateTotalTime(long totalTime) {
@@ -380,14 +382,16 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         databaseReference.child(year).child(month).child(day).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long totalTime = 0;
+                long calculatedTotalTime = 0;
                 for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
                     Long duration = taskSnapshot.child("totalDuration").getValue(Long.class);
                     if (duration != null) {
-                        totalTime += duration;
+                        calculatedTotalTime += duration;
                     }
                 }
-                updateTotalTime(totalTime);
+                updateTotalTime(calculatedTotalTime);
+                totalTime = calculatedTotalTime;
+
             }
 
             @Override
@@ -406,10 +410,11 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         }
         else{
             stopTimer();
-            calculateTotalTimeFromDB();
             //비동기식이라 그냥 딜레이 줘버림
             new Handler().postDelayed(() -> {
+                calculateTotalTimeFromDB();
                 fetchPieChart(); // 파이 차트 생성
+                updateTotalTime(totalTime);
             }, 1000);
             fetchPieChart();
         }
