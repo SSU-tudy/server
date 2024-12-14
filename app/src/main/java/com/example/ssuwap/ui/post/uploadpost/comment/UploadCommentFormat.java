@@ -53,6 +53,7 @@ public class UploadCommentFormat extends AppCompatActivity {
     private String photoURL;
     private Bitmap imageBitmap;
     private String userName;
+    private String userInfoId;
 
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -106,7 +107,7 @@ public class UploadCommentFormat extends AppCompatActivity {
                 String postId = commentRef.getKey();  // 자동 생성된 ID 가져오기
                 Log.d(TAG, "postID"+postId);
                 //서버로 올릴 데이터 객체로 포장
-                CommentInfo commentInfo = new CommentInfo(userName, postId, detailPost, photoURL);
+                CommentInfo commentInfo = new CommentInfo(userInfoId,userName, postId, detailPost, photoURL);
 
                 //위에서 저장한 경로에 올린다.
                 commentRef.setValue(commentInfo).addOnCompleteListener(task -> {
@@ -127,6 +128,7 @@ public class UploadCommentFormat extends AppCompatActivity {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser != null) {
+            userInfoId = firebaseUser.getUid();
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("studentName");
             userRef.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

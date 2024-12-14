@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 public class PostInfo implements Parcelable {
+
+    private String userInfoId;
     private String userName;
     private String postID;
     private String imageUrl;
@@ -26,7 +28,8 @@ public class PostInfo implements Parcelable {
         commentsList = new ArrayList<>();
     }
 
-    public PostInfo(String userName,String postID, String imageUrl, String description, String postTag1, String postTag2, String postTag3, Map<String, CommentInfo> comments) {
+    public PostInfo(String userInfoId,String userName,String postID, String imageUrl, String description, String postTag1, String postTag2, String postTag3, Map<String, CommentInfo> comments) {
+        this.userInfoId = userInfoId;
         this.userName = userName;
         this.postID = postID;
         this.imageUrl = imageUrl;
@@ -39,6 +42,7 @@ public class PostInfo implements Parcelable {
     }
 
     protected PostInfo(Parcel in) {
+        userInfoId = in.readString();
         userName = in.readString();
         postID = in.readString();
         imageUrl = in.readString();
@@ -77,6 +81,7 @@ public class PostInfo implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(userInfoId);
         parcel.writeString(userName);
         parcel.writeString(postID);
         parcel.writeString(imageUrl);
@@ -87,6 +92,10 @@ public class PostInfo implements Parcelable {
 
         // commentsList를 ArrayList 형태로 변환하여 저장
         parcel.writeTypedList(commentsList);
+    }
+
+    public void setUserInfoId(String userInfoId) {
+        this.userInfoId = userInfoId;
     }
 
     // Setter & Getter 메서드들
@@ -131,6 +140,10 @@ public class PostInfo implements Parcelable {
 
     public ArrayList<CommentInfo> getCommentsList() {
         return commentsList;
+    }
+
+    public String getUserInfoId() {
+        return userInfoId;
     }
 
     public String getPostID() {

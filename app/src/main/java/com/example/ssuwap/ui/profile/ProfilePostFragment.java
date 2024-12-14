@@ -54,6 +54,7 @@ public class ProfilePostFragment extends Fragment {
     private RecyclerView.Adapter adapter;
 
     private String userName;
+    private String userInfoId;
     private ArrayList<PostInfo> list;
 
     public ProfilePostFragment() {
@@ -115,6 +116,7 @@ public class ProfilePostFragment extends Fragment {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser != null) {
+            userInfoId = firebaseUser.getUid();
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("studentName");
             userRef.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -151,7 +153,7 @@ public class ProfilePostFragment extends Fragment {
                     try {
                         PostInfo postInfo = snapshot.getValue(PostInfo.class);
                         if(postInfo != null){
-                            if(Objects.equals(postInfo.getUserName(), userName)){
+                            if(Objects.equals(postInfo.getUserInfoId(), userInfoId)){
                                 Log.d(TAG, "my name : "+userName+" Other Post" + postInfo.getUserName());
                                 ArrayList<CommentInfo> commentList = new ArrayList<>();
                                 Map<String, CommentInfo> commentInfoMap = postInfo.getComments();

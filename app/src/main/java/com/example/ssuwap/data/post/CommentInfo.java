@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CommentInfo implements Parcelable {
+    public String userInfoId;
     public String userName;
     public String commentID;
     public String content;
@@ -11,7 +12,8 @@ public class CommentInfo implements Parcelable {
 
     public CommentInfo() {}
 
-    public CommentInfo(String userName,String commentID, String content, String commentImage) {
+    public CommentInfo(String userInfoId, String userName,String commentID, String content, String commentImage) {
+        this.userInfoId = userInfoId;
         this.userName = userName;
         this.commentID = commentID;
         this.content = content;
@@ -19,6 +21,7 @@ public class CommentInfo implements Parcelable {
     }
 
     protected CommentInfo(Parcel in) {
+        userInfoId = in.readString();
         userName = in.readString();
         commentID = in.readString();
         content = in.readString();
@@ -44,6 +47,7 @@ public class CommentInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(userInfoId);
         parcel.writeString(userName);
         parcel.writeString(commentID);
         parcel.writeString(content);
@@ -51,11 +55,14 @@ public class CommentInfo implements Parcelable {
     }
 
     // Getter and Setter methods
+
+    public String getUserInfoId() {return userInfoId;}
     public String getCommentID() { return commentID; }
     public String getContent() { return content; }
     public String getCommentImage() {return commentImage;}
     public String getUserName() { return userName; }
 
+    public void setUserInfoId(String userInfoId) {this.userInfoId = userInfoId;}
     public void setCommentID(String commentID) { this.commentID = commentID; }
     public void setContent(String content) { this.content = content; }
     public void setCommentImage(String commentImage) {this.commentImage = commentImage;}
