@@ -122,7 +122,12 @@ public class SellingFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         Log.d("SellingFragment", "Adapter attached to RecyclerView");
 
-
+        // 태그 RecyclerView 설정
+        tagRecyclerView = binding.tagrv;
+        tagRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        selectedTags = new ArrayList<>();
+        tagAdapter = new TagAdapter(selectedTags);
+        tagRecyclerView.setAdapter(tagAdapter);
 
         // 초기 데이터 로드
         loadAllBooks();
