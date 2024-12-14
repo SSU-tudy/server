@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Subject implements Serializable {
     private String subjectName;  // 과목명
+    private String id;
     private String grade;        // 학년
     private String semester;     // 학기
     private String department;   // 학과
@@ -26,6 +27,15 @@ public class Subject implements Serializable {
     }
 
     // Getter 및 Setter
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getSubjectName() { return subjectName; }
     public void setSubjectName(String subjectName) { this.subjectName = subjectName; }
 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- 학년 선택 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="학년 선택"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <NumberPicker
+        android:id="@+id/year_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- 학기 선택 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="학기 선택"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <NumberPicker
+        android:id="@+id/semester_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- 저장 버튼 -->
+    <Button
+        android:id="@+id/btn_save_timetable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="저장" />
+</LinearLayout>
