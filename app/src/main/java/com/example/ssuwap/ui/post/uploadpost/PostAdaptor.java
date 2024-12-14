@@ -24,6 +24,7 @@ public class PostAdaptor extends RecyclerView.Adapter<PostAdaptor.PostViewHolder
     private ArrayList<PostInfo> list;
     private Context context;
     FragmentManager fragmentManager;
+    private boolean isExpanded = false;
 
     public PostAdaptor(Context context, ArrayList<PostInfo> list, FragmentManager fragmentManager) {
         Log.d("PostAdaptor", "PostAdaptor()");
@@ -48,16 +49,35 @@ public class PostAdaptor extends RecyclerView.Adapter<PostAdaptor.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Log.d("PostAdaptor", "onBindViewHolder()");
         PostInfo postInfo = list.get(position);
+
         Glide.with(holder.itemView)
                 .load(postInfo.getImageUrl())
                 .into(holder.binding.postImage);
+
+        if(postInfo.getImageUrl() == null){
+            holder.binding.postImage.setVisibility(View.GONE);
+        } else {
+            holder.binding.postImage.setVisibility(View.VISIBLE);
+        }
+
+        holder.binding.postImage.setClipToOutline(true);
         holder.binding.postText.setText(postInfo.getDescription());
         Log.d("PostAdaptor", "image check : " + postInfo.getImageUrl());
         Log.d("PostAdaptor", "post check : " + postInfo.getDescription());
 
+        holder.binding.postTag1.setVisibility(View.GONE);
+        holder.binding.postTag2.setVisibility(View.GONE);
+        holder.binding.postTag3.setVisibility(View.GONE);
+
         holder.binding.postTag1.setText(postInfo.getPostTag1());
         holder.binding.postTag2.setText(postInfo.getPostTag2());
         holder.binding.postTag3.setText(postInfo.getPostTag3());
+
+        if (postInfo.getCommentsList() != null) {
+            holder.binding.commentCount.setText(String.valueOf(postInfo.getCommentsList().size()));
+        } else {
+            holder.binding.commentCount.setText("0");
+        }
 
         holder.binding.postView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +98,7 @@ public class PostAdaptor extends RecyclerView.Adapter<PostAdaptor.PostViewHolder
                         .newInstance("Param1","Param2",postInfo);
 
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, postViewFragment)
+                        .add(R.id.fragment_container, postViewFragment)
                         .addToBackStack(null)
                         .commit();
             }
@@ -100,6 +120,26 @@ public class PostAdaptor extends RecyclerView.Adapter<PostAdaptor.PostViewHolder
                 Intent intent = new Intent(context, FullScreenActivity.class);
                 intent.putExtra("imageUrl", postInfo.getImageUrl()); // 이미지 URL 전달
                 context.startActivity(intent);
+            }
+        });
+
+        holder.binding.hideTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isExpanded){
+                    holder.binding.hideTag.setBackgroundResource(R.drawable.baseline_keyboard_arrow_left_24);
+                    holder.binding.postTag1.setVisibility(View.GONE);
+                    holder.binding.postTag2.setVisibility(View.GONE);
+                    holder.binding.postTag3.setVisibility(View.GONE);
+                }
+                else{
+                    holder.binding.hideTag.setBackgroundResource(R.drawable.baseline_keyboard_arrow_right_24);
+                    holder.binding.postTag1.setVisibility(View.VISIBLE);
+                    holder.binding.postTag2.setVisibility(View.VISIBLE);
+                    holder.binding.postTag3.setVisibility(View.VISIBLE);
+                }
+
+                isExpanded = !isExpanded;
             }
         });
 

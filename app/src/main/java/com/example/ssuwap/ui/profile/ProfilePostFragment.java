@@ -102,7 +102,6 @@ public class ProfilePostFragment extends Fragment {
         list = new ArrayList<>();
 
         getUserNameForFirebase();
-        getMyPostForFirebase();
 
         RecyclerView recyclerView = view.findViewById(R.id.myPostRV);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -122,22 +121,25 @@ public class ProfilePostFragment extends Fragment {
                     String userId = task.getResult().getValue(String.class);
                     if (userId != null) {
                         userName = userId;
+                        Log.d(TAG, "userName : "+userName);
+
                     } else {
                         Log.d(TAG, "User ID가 존재하지 않습니다.");
                     }
                 } else {
                     Log.d(TAG, "User ID 가져오기 실패.");
                 }
-                Log.d(TAG, "userName : "+userName);
+
             });
         }
         else {
             Log.d(TAG, "firebaseUser null");
         }
+        getMyPostForFirebase();
     }
 
     private void getMyPostForFirebase(){
-
+        Log.d(TAG, "getMyPostForFirebase()");
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("PostInfo");
         valueEventListener = new ValueEventListener() {

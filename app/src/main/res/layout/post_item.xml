@@ -2,16 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/view_edge"
+    android:orientation="vertical"
     android:layout_margin="10dp"
     >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/hideTag"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/baseline_keyboard_arrow_left_24"/>
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
@@ -61,73 +71,77 @@
                 android:paddingEnd="3dp"
                 android:background="@drawable/rounded_tag"
                 />
-        </LinearLayout>
-
-        <View
-            android:background="#696969"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="2dp"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/postImage"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:clickable="true"
-
-                android:layout_gravity="left"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp" />
-
-                <TextView
-                    android:id="@+id/postText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxHeight="150dp"
-                    android:text=""
-                    android:layout_marginStart="10dp"
-                    android:textSize="16sp" />
 
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="2dp"
-            android:background="#696969"/>
+    </LinearLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:id="@+id/postImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_image"
+            />
         <LinearLayout
             android:id="@+id/postView"
             android:clickable="true"
             android:focusable="true"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp"
-            android:orientation="horizontal">
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
             <TextView
+                android:id="@+id/postText"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:maxHeight="150dp"
+                android:text=""
+                android:layout_margin="10dp"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_gravity="end"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:text="답변하러가기"
-                android:gravity="center"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-
-            <Button
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:background="@drawable/baseline_question_answer_24"/>
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/baseline_question_answer_24"/>
+
+                <TextView
+                    android:id="@+id/commentCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="7dp"
+                    android:text="0"
+                    android:textSize="15sp"
+                    android:gravity="center"/>
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black"/>
 
 </LinearLayout>
