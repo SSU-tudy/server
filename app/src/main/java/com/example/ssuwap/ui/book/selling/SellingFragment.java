@@ -67,15 +67,6 @@ public class SellingFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SellingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SellingFragment newInstance(String param1, String param2) {
         SellingFragment fragment = new SellingFragment();
         Bundle args = new Bundle();
@@ -99,8 +90,7 @@ public class SellingFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSellingBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
         return binding.getRoot();
@@ -131,6 +121,7 @@ public class SellingFragment extends Fragment {
 
         // 초기 데이터 로드
         loadAllBooks();
+        updateButtonStyles(binding.tvSelling, binding.tvSoldout);
 
         // 태그 추가 버튼 클릭 리스너 설정
         binding.btnAddTag.setOnClickListener(new View.OnClickListener() {
@@ -147,10 +138,22 @@ public class SellingFragment extends Fragment {
                 startActivity(new Intent(requireContext(), UploadBookFormat.class));
             }
         });
+
+        // 판매 중 버튼
+        binding.tvSelling.setOnClickListener(view13 -> {
+            filterBooks(false); // 판매 중인 책 표시
+            updateButtonStyles(binding.tvSelling, binding.tvSoldout);
+        });
+
+        // 판매 완료 버튼
+        binding.tvSoldout.setOnClickListener(view14 -> {
+            filterBooks(true); // 판매 완료된 책 표시
+            updateButtonStyles(binding.tvSoldout, binding.tvSelling);
+        });
     }
 
     private void loadAllBooks() {
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
@@ -160,7 +163,7 @@ public class SellingFragment extends Fragment {
                         arrayList.add(bookInfo);
                     }
                 }
-                Log.d("SellingFragment", "All data loaded, arrayList size: " + arrayList.size());
+                Log.d("SellingFragment", "Real-time data loaded, arrayList size: " + arrayList.size());
                 adapter.notifyDataSetChanged();
             }
 
@@ -171,6 +174,7 @@ public class SellingFragment extends Fragment {
         });
     }
 
+    // 태그 선택
     private void showTagSelectionBottomSheet() {
         // Bottom Sheet Dialog 생성
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
@@ -245,21 +249,18 @@ public class SellingFragment extends Fragment {
         bottomSheetDialog.show();
     }
 
-    // 학년 리스트 반환
+    // 학년, 학기, 학과 리스트 반환
     private List<String> getGrades() {
         return Arrays.asList("전체", "1학년", "2학년", "3학년", "4학년");
     }
-
-    // 학기 리스트 반환
     private List<String> getSemesters() {
         return Arrays.asList("전체", "1학기", "2학기");
     }
-
-    // 학과 리스트 반환
     private List<String> getDepartments() {
         return Arrays.asList("전체", "컴퓨터공학과", "소프트웨어학과", "정보통신공학과", "전자공학과");
     }
 
+    // 태그 변경에 따른 리스트 변경
     private void applySelectedTags() {
         // 선택한 태그를 기반으로 데이터 필터링 및 UI 업데이트
         // 가로 방향 RecyclerView에 태그 표시
@@ -267,7 +268,6 @@ public class SellingFragment extends Fragment {
         // 세로 방향 RecyclerView에 해당 태그를 가진 책만 표시
         loadBooksByTags();
     }
-
     private void updateTagRecyclerView() {
         selectedTags.clear();
         if (!selectedGrade.equals("") && !selectedGrade.equals("전체")) {
@@ -281,7 +281,6 @@ public class SellingFragment extends Fragment {
         }
         tagAdapter.notifyDataSetChanged();
     }
-
     private void loadBooksByTags() {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -313,6 +312,33 @@ public class SellingFragment extends Fragment {
                     }
                 }
                 Log.d("SellingFragment", "Data filtered by tags, arrayList size: " + arrayList.size());
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("SellingFragment", "Firebase error: " + error.toException());
+            }
+        });
+    }
+
+    // 판매 여부에 따라 리스트 변경
+    private void updateButtonStyles(View selectedButton, View unselectedButton) {
+        selectedButton.setBackgroundResource(R.drawable.selected_button_background); // 활성화된 버튼 스타일
+        unselectedButton.setBackgroundResource(R.drawable.unselected_button_background); // 비활성화된 버튼 스타일
+    }
+    private void filterBooks(boolean isSold) {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    BookInfo bookInfo = snapshot.getValue(BookInfo.class);
+                    if (bookInfo != null && bookInfo.isSold() == isSold) {
+                        arrayList.add(bookInfo);
+                    }
+                }
+                Log.d("SellingFragment", "Filtered real-time data by isSold: " + isSold + ", arrayList size: " + arrayList.size());
                 adapter.notifyDataSetChanged();
             }
 

@@ -14,4 +14,6 @@
     <color name="gray">#FFC4C4C4</color>
     <color name="brightyellow">#FFECFC92</color>
     <color name="darkgreen">#FF479696</color>
+    <color name="selected_button_color">#FF6200EE</color> <!-- 활성화 버튼 색 (보라색) -->
+    <color name="unselected_button_color">#FFCCCCCC</color> <!-- 비활성화 버튼 색 (회색) -->
 </resources>

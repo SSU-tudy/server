@@ -135,16 +135,7 @@ public class UploadBookFormat extends AppCompatActivity {
             long time = System.currentTimeMillis();
 
             // uploader 얻기
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("studentName");
-            userRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    String userId = task.getResult().getValue(String.class);
-                    if (userId != null) {
-                        myName = userId;
-                    }
-                }
-            });
+            myName = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
             BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price, time, false, myName);
             mDatabaseRef.push().setValue(book)
