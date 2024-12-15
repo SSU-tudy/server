@@ -60,7 +60,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.CustomViewHold
         // 아이템 클릭 리스너 설정
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, BuyingActivity.class);
-            intent.putExtra("bookInfo", bookInfo); // 키를 "bookInfo"로 통일
+            intent.putExtra("BookInfo", bookInfo); // 키를 "bookInfo"로 통일
             context.startActivity(intent);
         });
     }

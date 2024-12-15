@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide(); // ActionBar 숨기기
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 

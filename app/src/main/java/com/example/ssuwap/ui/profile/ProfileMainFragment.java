@@ -83,7 +83,6 @@ public class ProfileMainFragment extends Fragment {
 
         setupUserProfileImage();
         setupTagsRecyclerView();
-        setupEditProfileButton();
         setupActivityButtons();
         setupAddSubjectButton();
         setupTimetableTitleClickListener();
@@ -93,6 +92,8 @@ public class ProfileMainFragment extends Fragment {
         loadTagHistory();
         loadSubjects();
         editProfileImage();
+
+        setupEditProfileButton();
     }
 
     // 유저 정보 설정
@@ -111,6 +112,32 @@ public class ProfileMainFragment extends Fragment {
                 Toast.makeText(getContext(), "사용자 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show());
     }
     private void setupEditProfileButton() {
+        // Firebase 사용자 인증 확인
+        userRef.get().addOnSuccessListener(snapshot -> {
+            // UserAccount 객체로 데이터 변환
+            currentUser = snapshot.getValue(UserAccount.class);
+
+            if (currentUser != null) {
+                // currentUser가 성공적으로 설정됨
+                binding.tvUserName.setText(currentUser.getStudentName());
+                binding.tvUserDetails.setText(String.format("%s | %s %s",
+                        currentUser.getDepartment(), currentUser.getGrade(), currentUser.getSemester()));
+
+                // 프로필 이미지 로드
+                if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+                    Glide.with(requireContext())
+                            .load(currentUser.getImageUrl())
+                            .error(R.drawable.baseline_face_24) // 기본 이미지 설정
+                            .into(binding.ivProfilePicture);
+                }
+            } else {
+                // currentUser가 null인 경우 처리
+                Toast.makeText(requireContext(), "사용자 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> {
+            // Firebase 데이터 가져오기 실패 처리
+            Toast.makeText(requireContext(), "사용자 정보를 가져오는 데 실패했습니다: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
         binding.btnEditProfile.setOnClickListener(v -> {
             if (currentUser == null) return;
 

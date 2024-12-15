@@ -79,6 +79,7 @@ public class SellingHistoryActivity extends AppCompatActivity {
         // "판매 완료" 버튼 클릭 리스너
         btnSoldout.setOnClickListener(v -> {
             filterBooks(true); // sold == true인 책 필터링
+            // db에 적용
             btnSoldout.setBackgroundTintList(getColorStateList(R.color.blue));
             btnSelling.setBackgroundTintList(getColorStateList(R.color.gray));
         });
