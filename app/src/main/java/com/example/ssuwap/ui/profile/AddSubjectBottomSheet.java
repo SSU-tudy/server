@@ -15,29 +15,27 @@ import com.example.ssuwap.R;
 import com.example.ssuwap.data.user.Subject;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class AddSubjectBottomSheet extends BottomSheetDialogFragment {
 
-    public interface SubjectAddedListener {
-        void onSubjectAdded(Subject subject);
-    }
+    private OnSubjectAddedListener listener;
 
-    private SubjectAddedListener listener;
-
-    public void setSubjectAddedListener(SubjectAddedListener listener) {
+    public void setSubjectAddedListener(OnSubjectAddedListener listener) {
         this.listener = listener;
-    }
-
-    public AddSubjectBottomSheet() {
-        // Required empty public constructor
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.bottom_sheet_add_subject, container, false);
+        return inflater.inflate(R.layout.bottom_sheet_add_subject, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         EditText etSubjectName = view.findViewById(R.id.et_subject_name);
         EditText etSubjectGrade = view.findViewById(R.id.et_subject_grade);
@@ -66,30 +64,61 @@ public class AddSubjectBottomSheet extends BottomSheetDialogFragment {
             Subject subject = new Subject(subjectName, grade, semester, department, day, startTime, endTime);
 
             saveSubjectToDatabase(subject);
-
-            if (listener != null) {
-                listener.onSubjectAdded(subject);
-            }
         });
-
-        return view;
     }
 
     private void saveSubjectToDatabase(Subject subject) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String gradeSemesterKey = subject.getGrade() + "_" + subject.getSemester(); // 학년_학기 Key 생성
-        DatabaseReference userSubjectsRef = FirebaseDatabase.getInstance()
+        DatabaseReference subjectsRef = FirebaseDatabase.getInstance()
                 .getReference("timetableInfo")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child(gradeSemesterKey); // 학년_학기 Key 하위에 저장
+                .child(userId)
+                .child(gradeSemesterKey);
 
-        String key = userSubjectsRef.push().getKey(); // Unique key for the subject
-        if (key != null) {
-            userSubjectsRef.child(key).setValue(subject)
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(getContext(), "과목이 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                        dismiss();
-                    })
-                    .addOnFailureListener(e -> Toast.makeText(getContext(), "과목 추가 실패.", Toast.LENGTH_SHORT).show());
-        }
+        DatabaseReference tagSubjectsRef = FirebaseDatabase.getInstance()
+                .getReference("TagHistory")
+                .child(userId)
+                .child("subjects");
+
+        // 중복 확인
+        tagSubjectsRef.get().addOnSuccessListener(snapshot -> {
+            boolean isDuplicate = false;
+
+            for (DataSnapshot subjectSnapshot : snapshot.getChildren()) {
+                String existingSubject = subjectSnapshot.getValue(String.class);
+                if (existingSubject != null && existingSubject.equals(subject.getSubjectName())) {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+
+            if (!isDuplicate) {
+                // 중복이 없으면 데이터 추가
+                String subjectKey = subjectsRef.push().getKey();
+                if (subjectKey != null) {
+                    subjectsRef.child(subjectKey).setValue(subject)
+                            .addOnSuccessListener(unused -> {
+                                // TagHistory에도 추가
+                                String tagKey = tagSubjectsRef.push().getKey();
+                                if (tagKey != null) {
+                                    tagSubjectsRef.child(tagKey).setValue(subject.getSubjectName())
+                                            .addOnSuccessListener(unused1 -> {
+                                                Toast.makeText(getContext(), "과목이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                                                if (listener != null) listener.onSubjectAdded(subject);
+                                                dismiss();
+                                            });
+                                }
+                            });
+                }
+            } else {
+                Toast.makeText(getContext(), "이미 존재하는 과목입니다.", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(getContext(), "중복 확인 실패.", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    public interface OnSubjectAddedListener {
+        void onSubjectAdded(Subject subject);
     }
 }

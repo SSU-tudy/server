@@ -141,7 +141,7 @@ public class UploadPostFormat extends AppCompatActivity implements TagDialogFrag
                 String postId = postRef.getKey();  // 자동 생성된 ID 가져오기
                 Log.d("UploadPostFormat", "name : " + userName);
                 //서버로 올릴 데이터 객체로 포장
-                PostInfo postInfo = new PostInfo(userInfoId,userName, postId ,photoURL, detailPost, tagList.get(0), tagList.get(1), tagList.get(2),new HashMap<>());
+                PostInfo postInfo = new PostInfo(userInfoId,userName, postId ,photoURL, detailPost, tagList.get(0), tagList.get(1), tagList.get(2),new HashMap<>(), new HashMap<>());
 
                 //위에서 저장한 경로에 올린다.
                 postRef.setValue(postInfo).addOnCompleteListener(task -> {

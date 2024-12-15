@@ -25,6 +25,7 @@ import com.example.ssuwap.data.user.Subject;
 import com.example.ssuwap.data.user.UserAccount;
 import com.example.ssuwap.databinding.FragmentProfileMainBinding;
 import com.example.ssuwap.ui.profile.calander.CalendarActivity;
+import com.example.ssuwap.ui.profile.history.SellingHistoryActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +41,8 @@ public class ProfileMainFragment extends Fragment {
     private FragmentProfileMainBinding binding;
     private DatabaseReference userRef;
     private DatabaseReference subjectRef;
+    private DatabaseReference tagHistoryRef;
+    private TagHistoryAdapter tagAdapter;
 
     private List<Subject> subjectList = new ArrayList<>();
     private UserAccount currentUser;
@@ -74,6 +77,10 @@ public class ProfileMainFragment extends Fragment {
                 .getReference("timetableInfo")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+        tagHistoryRef = FirebaseDatabase.getInstance()
+                .getReference("TagHistory")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
         setupUserProfile();
         setupTagsRecyclerView();
         setupEditProfileButton();
@@ -83,6 +90,7 @@ public class ProfileMainFragment extends Fragment {
 
         initTimetableHeaders();
         initTimetable();
+        loadTagHistory();
         loadSubjects();
     }
 
@@ -105,13 +113,17 @@ public class ProfileMainFragment extends Fragment {
         binding.btnEditProfile.setOnClickListener(v -> {
             if (currentUser == null) return;
 
-            EditProfileBottomSheet bottomSheet = new EditProfileBottomSheet(currentUser, updatedUser -> {
-                userRef.setValue(updatedUser).addOnSuccessListener(aVoid -> {
-                    Toast.makeText(getContext(), "프로필이 업데이트되었습니다.", Toast.LENGTH_SHORT).show();
+            // EditProfileBottomSheet 생성
+            EditProfileBottomSheet bottomSheet = new EditProfileBottomSheet(currentUser, new EditProfileBottomSheet.OnProfileUpdatedListener() {
+                @Override
+                public void onProfileUpdated(UserAccount updatedUser) {
                     setupUserProfile();
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "프로필 업데이트 실패.", Toast.LENGTH_SHORT).show();
-                });
+                }
+
+                @Override
+                public void onDismissed() {
+                    loadTagHistory();
+                }
             });
 
             bottomSheet.show(getParentFragmentManager(), "EditProfileBottomSheet");
@@ -120,14 +132,59 @@ public class ProfileMainFragment extends Fragment {
 
     // 태그들
     private void setupTagsRecyclerView() {
-        TagHistoryAdapter tagAdapter = new TagHistoryAdapter(new ArrayList<>());
+        tagAdapter = new TagHistoryAdapter(new ArrayList<>());
         binding.rvTags.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvTags.setAdapter(tagAdapter);
+    }
+    private void loadTagHistory() {
+        tagHistoryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<String> tags = new ArrayList<>();
+
+                // Load department tags
+                if (snapshot.child("department").exists()) {
+                    for (DataSnapshot deptSnapshot : snapshot.child("department").getChildren()) {
+                        String tag = deptSnapshot.getValue(String.class);
+                        if (tag != null && !tags.contains(tag)) { // 중복 방지
+                            tags.add(tag);
+                        }
+                    }
+                }
+
+                // Load subject tags
+                if (snapshot.child("subjects").exists()) {
+                    for (DataSnapshot subjectSnapshot : snapshot.child("subjects").getChildren()) {
+                        String tag = subjectSnapshot.getValue(String.class);
+                        if (tag != null && !tags.contains(tag)) { // 중복 방지
+                            tags.add(tag);
+                        }
+                    }
+                }
+
+                if (!tags.isEmpty()) {
+                    tagAdapter.setTagList(tags); // RecyclerView 데이터 업데이트
+                    binding.rvTags.setVisibility(View.VISIBLE); // 데이터가 있으면 RecyclerView 표시
+                } else {
+                    binding.rvTags.setVisibility(View.GONE); // 데이터가 없으면 RecyclerView 숨김
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), "태그 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     // 활동 3개로 이동
     private void setupActivityButtons() {
-        binding.btnSalesHistory.setOnClickListener(v -> { });
+        binding.btnSalesHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(requireActivity(), SellingHistoryActivity.class));
+            }
+        });
         binding.btnMyPosts.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, ProfilePostFragment.newInstance("param1", "param2"))
@@ -153,7 +210,9 @@ public class ProfileMainFragment extends Fragment {
         binding.btnAddSubject.setOnClickListener(v -> {
             AddSubjectBottomSheet bottomSheet = new AddSubjectBottomSheet();
             bottomSheet.setSubjectAddedListener(subject -> {
-                Toast.makeText(getContext(), "과목이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                // 새로운 과목 추가 후 시간표와 태그 RecyclerView를 최신화
+                loadSubjects();
+                loadTagHistory();
             });
             bottomSheet.show(getParentFragmentManager(), "AddSubjectBottomSheet");
         });
