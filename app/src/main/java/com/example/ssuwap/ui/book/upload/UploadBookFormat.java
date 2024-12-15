@@ -92,6 +92,13 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
         binding = ActivityUploadBookFormatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        getUserInfroForFirebase();
+
+        binding.selectGrades.setVisibility(View.VISIBLE);
+        binding.selectTerm.setVisibility(View.GONE);
+        binding.selectSubject.setVisibility(View.GONE);
+
+
         if(binding == null) Log.d("UploadBookFormat", "binding fail");
         Log.d("UploadBookFormat", "binding check");
         binding.scanBookButton.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +120,8 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
             }
         });
 
+        binding.uploadBookButton.setEnabled(false);
+        getUserInfroForFirebase();
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("BookInfo");
@@ -125,17 +134,11 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
             String description = binding.detailInfoBook.getText().toString();
             long time = System.currentTimeMillis();
 
-            // uploader 얻기
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("studentName");
-            userRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    String userId = task.getResult().getValue(String.class);
-                    if (userId != null) {
-                        myName = userId;
-                    }
-                }
-            });
+            Log.d(TAG, price+"원");
+            Log.d(TAG, grade);
+            Log.d(TAG, subject);
+            Log.d(TAG, semester);
+            Log.d(TAG, description);
 
             BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price, time, false, myName);
             mDatabaseRef.push().setValue(book)
@@ -153,14 +156,19 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
                 authorBook = authors;
                 publisherBook = publisher;
                 imageUrlBook = imageUrl;
+                updateUploadButtonState();
 
-                Log.d("UploadBookFormatCheck", titleBook);
-                Log.d("UploadBookFormatCheck", imageUrlBook);
-                Log.d("UploadBookFormatCheck", authorBook);
-                Log.d("UploadBookFormatCheck", publisherBook);
+                Log.d(TAG, titleBook);
+                Log.d(TAG, imageUrlBook);
+                Log.d(TAG, authorBook);
+                Log.d(TAG, publisherBook);
+
                 binding.titleTextView.setText("제목: " + title);
                 binding.authorsTextView.setText("저자: " + authors);
                 binding.publisherTextView.setText("출판사: " + publisher);
+                Log.d(TAG, imageUrlBook);
+                Log.d(TAG, myName);
+
                 // Glide를 사용해 이미지 로드
                 Glide.with(UploadBookFormat.this)
                         .load(imageUrl)
@@ -169,8 +177,10 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
 
             @Override
             public void onError(Exception e) {
-                Log.e("UploadBookFormat", "Error fetching book info", e);
+                Log.e(TAG, "Error fetching book info", e);
                 binding.titleTextView.setText("Error fetching book info");
+                imageUrlBook = null;
+                updateUploadButtonState();
             }
         });
 
@@ -178,24 +188,24 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
     }
 
     private void getUserInfroForFirebase() {
+        Log.d(TAG, "getUserInfroForFirebase()");
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
+        Log.d(TAG, ""+firebaseUser.getUid());
+
         if (firebaseUser != null) {
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo")
-                    .child(firebaseUser.getUid()).child("studentName");
-            userRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult().exists()) {
-                    myName = task.getResult().getValue(String.class);
-                    binding.uploadBookButton.setEnabled(true); // 버튼 활성화
-                } else {
-                    Log.e(TAG, "Failed to fetch user name or user name does not exist.");
-                    Toast.makeText(this, "사용자 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
-                }
-            });
+            myName = firebaseUser.getUid();
+            updateUploadButtonState();
+        } else {
+            myName = null;
+            updateUploadButtonState();
         }
     }
 
+    private void updateUploadButtonState() {
+        binding.uploadBookButton.setEnabled(imageUrlBook != null && myName != null);
+    }
 
     @Override
     public void onTagSelected(String grade, String semester, String subject) {
