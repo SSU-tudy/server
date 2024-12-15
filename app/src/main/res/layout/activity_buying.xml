@@ -36,7 +36,7 @@
                     android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
+                    android:textSize="15sp"
                     android:text="팝니다"
                     android:layout_margin="10dp"/>
                 <androidx.recyclerview.widget.RecyclerView
@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/exLongtext"
-                    android:textSize="20sp"/>
+                    android:textSize="15sp"/>
 
             </LinearLayout>
         </ScrollView>
@@ -60,32 +60,5 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="10dp"/>
     </FrameLayout>
-    <LinearLayout
-        android:id="@+id/under_bar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center_vertical"
-        android:layout_weight="1"
-        >
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="15dp"
-            android:layout_weight="1"
-            android:text="Sell"/>
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="15dp"
-            android:layout_weight="1"
-            android:text="Buy"/>
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="15dp"
-            android:layout_weight="1"
-            android:text="Profile"/>
-    </LinearLayout>
-
 
 </LinearLayout>

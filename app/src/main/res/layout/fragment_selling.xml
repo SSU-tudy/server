@@ -23,16 +23,24 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="20"/>
-
-        <Button
-            android:id="@+id/btn_addTag"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="9dp"
-            android:text="+"/>
+            android:background="@drawable/baseline_add_24" />
+
+        <TextView
+            android:id="@+id/btn_addTag"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:text="Tag"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:textStyle="bold" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

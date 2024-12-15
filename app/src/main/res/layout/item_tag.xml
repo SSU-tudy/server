@@ -7,9 +7,10 @@
         android:id="@+id/tag_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:text="test"
+        android:padding="3dp"
         android:layout_margin="4dp"
-        android:background="@drawable/tag_background"
+        android:background="@drawable/rounded_tag"
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 </LinearLayout>

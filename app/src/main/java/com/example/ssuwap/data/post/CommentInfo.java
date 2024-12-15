@@ -9,15 +9,17 @@ public class CommentInfo implements Parcelable {
     public String commentID;
     public String content;
     public String commentImage;
+    public String userIndex;
 
     public CommentInfo() {}
 
-    public CommentInfo(String userInfoId, String userName,String commentID, String content, String commentImage) {
+    public CommentInfo(String userInfoId, String userName,String commentID, String content, String commentImage, String userIndex) {
         this.userInfoId = userInfoId;
         this.userName = userName;
         this.commentID = commentID;
         this.content = content;
         this.commentImage = commentImage;
+        this.userIndex = userIndex;
     }
 
     protected CommentInfo(Parcel in) {
@@ -61,10 +63,12 @@ public class CommentInfo implements Parcelable {
     public String getContent() { return content; }
     public String getCommentImage() {return commentImage;}
     public String getUserName() { return userName; }
+    public String getUserIndex() {return userIndex;}
 
     public void setUserInfoId(String userInfoId) {this.userInfoId = userInfoId;}
     public void setCommentID(String commentID) { this.commentID = commentID; }
     public void setContent(String content) { this.content = content; }
     public void setCommentImage(String commentImage) {this.commentImage = commentImage;}
     public void setUserName(String userName) { this.userName = userName; }
+    public void setUserIndex(String userIndex) {this.userIndex = userIndex;}
 }
