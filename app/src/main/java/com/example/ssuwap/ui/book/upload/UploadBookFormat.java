@@ -85,6 +85,7 @@ public class UploadBookFormat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityUploadBookFormatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         if(binding == null) Log.d("UploadBookFormat", "binding fail");
         Log.d("UploadBookFormat", "binding check");
         binding.scanBookButton.setOnClickListener(new View.OnClickListener() {
