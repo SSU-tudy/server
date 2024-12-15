@@ -92,13 +92,6 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
         binding = ActivityUploadBookFormatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        getUserInfroForFirebase();
-
-        binding.selectGrades.setVisibility(View.VISIBLE);
-        binding.selectTerm.setVisibility(View.GONE);
-        binding.selectSubject.setVisibility(View.GONE);
-
-
         if(binding == null) Log.d("UploadBookFormat", "binding fail");
         Log.d("UploadBookFormat", "binding check");
         binding.scanBookButton.setOnClickListener(new View.OnClickListener() {
@@ -120,7 +113,6 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
             }
         });
 
-        binding.uploadBookButton.setEnabled(false);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("BookInfo");
@@ -133,11 +125,17 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
             String description = binding.detailInfoBook.getText().toString();
             long time = System.currentTimeMillis();
 
-            Log.d(TAG, price+"원");
-            Log.d(TAG, grade);
-            Log.d(TAG, subject);
-            Log.d(TAG, semester);
-            Log.d(TAG, description);
+            // uploader 얻기
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("studentName");
+            userRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String userId = task.getResult().getValue(String.class);
+                    if (userId != null) {
+                        myName = userId;
+                    }
+                }
+            });
 
             BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price, time, false, myName);
             mDatabaseRef.push().setValue(book)
@@ -156,10 +154,10 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
                 publisherBook = publisher;
                 imageUrlBook = imageUrl;
 
-                Log.d(TAG, titleBook);
-                Log.d(TAG, imageUrlBook);
-                Log.d(TAG, authorBook);
-                Log.d(TAG, publisherBook);
+                Log.d("UploadBookFormatCheck", titleBook);
+                Log.d("UploadBookFormatCheck", imageUrlBook);
+                Log.d("UploadBookFormatCheck", authorBook);
+                Log.d("UploadBookFormatCheck", publisherBook);
                 binding.titleTextView.setText("제목: " + title);
                 binding.authorsTextView.setText("저자: " + authors);
                 binding.publisherTextView.setText("출판사: " + publisher);
@@ -171,7 +169,7 @@ public class UploadBookFormat extends AppCompatActivity implements TagSelectFrag
 
             @Override
             public void onError(Exception e) {
-                Log.e(TAG, "Error fetching book info", e);
+                Log.e("UploadBookFormat", "Error fetching book info", e);
                 binding.titleTextView.setText("Error fetching book info");
             }
         });
