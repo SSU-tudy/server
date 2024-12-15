@@ -242,28 +242,35 @@ public class TodoMainFragment extends Fragment implements TodomainAdapter.OnTime
         String year = String.valueOf(calendar.get(Calendar.YEAR));
         String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-
         DatabaseReference dayReference = databaseReference.child(year).child(month).child(day);
 
-        // 고유 Firebase 키 생성
-        String uniqueKey = dayReference.push().getKey();
+        dayReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String uniqueKey = dayReference.push().getKey();
+                Map<String, Object> itemData = new HashMap<>();
+                itemData.put("subject", subject);
+                itemData.put("color", String.format("#%06X", (0xFFFFFF & color)));
+                itemData.put("totalDuration", 0);
+                itemData.put("sessions", new HashMap<>());
 
-        // 새 아이템 데이터 생성
-        Map<String, Object> itemData = new HashMap<>();
-        itemData.put("subject", subject);
-        itemData.put("color", String.format("#%06X", (0xFFFFFF & color)));
-        itemData.put("totalDuration", 0); // 초기 총 지속 시간은 0
-        itemData.put("sessions", null);   // 세션 정보는 초기값 없음
+                dayReference.child(uniqueKey).setValue(itemData)
+                        .addOnSuccessListener(aVoid -> {
+                            loadData();
+                            Toast.makeText(requireContext(), "항목이 추가되었습니다", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(requireContext(), "항목 추가 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            }
 
-        // Firebase에 저장
-        dayReference.child(uniqueKey).setValue(itemData)
-                .addOnSuccessListener(aVoid -> {
-                    loadData(); // 데이터 다시 로드
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(requireContext(), "항목 추가 실패: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(requireContext(), "데이터베이스 오류: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
     public class GridPatternView extends View {
 
