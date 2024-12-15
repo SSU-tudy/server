@@ -30,6 +30,9 @@ import java.util.Date;
 import java.util.UUID;
 
 public class UploadBookFormat extends AppCompatActivity {
+
+    private static final String TAG = "UploadBookFormat";
+
     private ActivityUploadBookFormatBinding binding;
     private AlertDialog gradesDialog;
     private AlertDialog termsDialog;
@@ -86,6 +89,8 @@ public class UploadBookFormat extends AppCompatActivity {
         binding = ActivityUploadBookFormatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        getUserInfroForFirebase();
+
         if(binding == null) Log.d("UploadBookFormat", "binding fail");
         Log.d("UploadBookFormat", "binding check");
         binding.scanBookButton.setOnClickListener(new View.OnClickListener() {
@@ -122,29 +127,24 @@ public class UploadBookFormat extends AppCompatActivity {
             subjectDialog.show();
         });
 
+        binding.uploadBookButton.setEnabled(false);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("BookInfo");
         binding.uploadBookButton.setOnClickListener(view -> {
-            Log.d("UploadBookFormatCheck", "uploadCheck");
-            String price = binding.bookPrice.getText().toString(); Log.d("UploadBookFormatCheck", price+"원");
-            String grade = binding.selectGrades.getText().toString(); Log.d("UploadBookFormatCheck", grade);
-            String subject = binding.selectSubject.getText().toString(); Log.d("UploadBookFormatCheck", subject);
-            String semester = binding.selectTerm.getText().toString(); Log.d("UploadBookFormatCheck", semester);
-            String description = binding.detailInfoBook.getText().toString(); Log.d("UploadBookFormatCheck", description);
+            Log.d(TAG, "uploadCheck");
+            String price = binding.bookPrice.getText().toString();
+            String grade = binding.selectGrades.getText().toString();
+            String subject = binding.selectSubject.getText().toString();
+            String semester = binding.selectTerm.getText().toString();
+            String description = binding.detailInfoBook.getText().toString();
             long time = System.currentTimeMillis();
 
-            // uploader 얻기
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo").child(firebaseUser.getUid()).child("studentName");
-            userRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    String userId = task.getResult().getValue(String.class);
-                    if (userId != null) {
-                        myName = userId;
-                    }
-                }
-            });
+            Log.d(TAG, price+"원");
+            Log.d(TAG, grade);
+            Log.d(TAG, subject);
+            Log.d(TAG, semester);
+            Log.d(TAG, description);
 
             BookInfo book = new BookInfo(titleBook, imageUrlBook, authorBook, publisherBook, description, grade, semester, subject, price, time, false, myName);
             mDatabaseRef.push().setValue(book)
@@ -163,10 +163,10 @@ public class UploadBookFormat extends AppCompatActivity {
                 publisherBook = publisher;
                 imageUrlBook = imageUrl;
 
-                Log.d("UploadBookFormatCheck", titleBook);
-                Log.d("UploadBookFormatCheck", imageUrlBook);
-                Log.d("UploadBookFormatCheck", authorBook);
-                Log.d("UploadBookFormatCheck", publisherBook);
+                Log.d(TAG, titleBook);
+                Log.d(TAG, imageUrlBook);
+                Log.d(TAG, authorBook);
+                Log.d(TAG, publisherBook);
                 binding.titleTextView.setText("제목: " + title);
                 binding.authorsTextView.setText("저자: " + authors);
                 binding.publisherTextView.setText("출판사: " + publisher);
@@ -178,11 +178,30 @@ public class UploadBookFormat extends AppCompatActivity {
 
             @Override
             public void onError(Exception e) {
-                Log.e("UploadBookFormat", "Error fetching book info", e);
+                Log.e(TAG, "Error fetching book info", e);
                 binding.titleTextView.setText("Error fetching book info");
             }
         });
 
         fetcher.fetchBookInfo(isbn);
+    }
+
+    private void getUserInfroForFirebase() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser != null) {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("UserInfo")
+                    .child(firebaseUser.getUid()).child("studentName");
+            userRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult().exists()) {
+                    myName = task.getResult().getValue(String.class);
+                    binding.uploadBookButton.setEnabled(true); // 버튼 활성화
+                } else {
+                    Log.e(TAG, "Failed to fetch user name or user name does not exist.");
+                    Toast.makeText(this, "사용자 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }
