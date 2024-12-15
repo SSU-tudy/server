@@ -81,7 +81,7 @@ public class ProfileMainFragment extends Fragment {
                 .getReference("TagHistory")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        setupUserProfile();
+        setupUserProfileImage();
         setupTagsRecyclerView();
         setupEditProfileButton();
         setupActivityButtons();
@@ -92,6 +92,7 @@ public class ProfileMainFragment extends Fragment {
         initTimetable();
         loadTagHistory();
         loadSubjects();
+        editProfileImage();
     }
 
     // 유저 정보 설정
@@ -127,6 +128,47 @@ public class ProfileMainFragment extends Fragment {
             });
 
             bottomSheet.show(getParentFragmentManager(), "EditProfileBottomSheet");
+        });
+    }
+    private void editProfileImage() {
+        binding.ivProfilePicture.setOnClickListener(v -> {
+            PhotoUploadBottomSheet photoUploadBottomSheet = new PhotoUploadBottomSheet();
+            photoUploadBottomSheet.setOnPhotoUploadedListener(photoUri -> {
+                Toast.makeText(requireContext(), "이미지 업로드 성공: " + photoUri.toString(), Toast.LENGTH_SHORT).show();
+                Glide.with(requireContext()).load(photoUri).into(binding.ivProfilePicture);
+            });
+            photoUploadBottomSheet.show(getParentFragmentManager(), "PhotoUploadBottomSheet");
+        });
+    }
+    private void setupUserProfileImage(){
+        // Firebase 참조 설정
+        DatabaseReference userRef = FirebaseDatabase.getInstance()
+                .getReference("UserInfo")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        // Firebase 데이터 로드
+        userRef.get().addOnSuccessListener(dataSnapshot -> {
+            if (dataSnapshot.exists()) {
+                // 사용자 정보 객체 가져오기
+                UserAccount user = dataSnapshot.getValue(UserAccount.class); // UserAccount는 사용자 정보를 담는 클래스
+                if (user != null && user.getImageUrl() != null && !user.getImageUrl().isEmpty()) {
+                    // 사용자 이미지 URL 가져와서 Glide로 로드
+                    Glide.with(requireContext())
+                            .load(user.getImageUrl())
+                            .placeholder(R.drawable.ic_launcher_background) // 로드 중일 때 표시될 기본 이미지
+                            .error(R.drawable.ic_launcher_foreground)       // 오류 시 표시될 기본 이미지
+                            .into(binding.ivProfilePicture);
+                } else {
+                    Log.w("Profile", "Image URL is null or empty.");
+                    Toast.makeText(requireContext(), "프로필 이미지가 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Log.w("Profile", "No data found for the user.");
+                Toast.makeText(requireContext(), "사용자 정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> {
+            Log.e("Profile", "Failed to load user data.", e);
+            Toast.makeText(requireContext(), "사용자 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
         });
     }
 
