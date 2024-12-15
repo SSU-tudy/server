@@ -46,7 +46,7 @@ public class SellingAdaptor extends RecyclerView.Adapter<SellingAdaptor.SellingV
         Glide.with(holder.itemView)
                 .load(arrayList.get(position).getImageUrl())
                 .into(holder.binding.ivBook); Log.d("SellingAdaptor", "image check");
-        holder.binding.price.setText(arrayList.get(position).getPrice()); Log.d("SellingAdaptor", "price check" + arrayList.get(position).getPrice());
+        holder.binding.price.setText(arrayList.get(position).getPrice()+"원"); Log.d("SellingAdaptor", "price check" + arrayList.get(position).getPrice());
         holder.binding.title.setText(arrayList.get(position).getTitle()); Log.d("SellingAdaptor", "title check");
         holder.binding.chatnum.setText(String.valueOf(chatNum));
 

@@ -23,7 +23,7 @@ public class CustomLineSpan implements LineBackgroundSpan {
 
         for (SubjectData subject : subjects) {
             float hours = subject.getTotalDuration() / 3600000f; // 최대 5시간 기준 밀리세컨이라 3600으로 나누기
-            float ratio = Math.min(hours / 0.01f, 1.0f); // 최대 5시간 기준 비율 계산 테스트용으로 맥스 1분 ㄱㄱ
+            float ratio = Math.min(hours / 3f, 1.0f); // 최대 3시간 기준 비율 계산 테스트용으로 맥스 1분 ㄱㄱ
             int lineLength = (int) (maxWidth * ratio); // 선의 길이 계산
 
             // 선의 색상 설정
