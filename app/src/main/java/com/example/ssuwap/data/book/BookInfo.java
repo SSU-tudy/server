@@ -1,6 +1,8 @@
 // BookInfo.java
 package com.example.ssuwap.data.book;
 
+import com.google.firebase.database.PropertyName;
+
 import java.io.Serializable;
 
 public class BookInfo implements Serializable {
@@ -68,7 +70,9 @@ public class BookInfo implements Serializable {
     public long getTime() { return time; }
     public void setTime(long time) { this.time = time; }
 
+    @PropertyName("isSold")
     public boolean isSold() { return isSold; }
+    @PropertyName("isSold")
     public void setSold(boolean sold) { isSold = sold; }
 
     public String getUploaderId() { return uploaderId; }
