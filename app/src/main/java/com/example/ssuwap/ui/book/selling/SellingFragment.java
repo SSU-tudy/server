@@ -123,6 +123,10 @@ public class SellingFragment extends Fragment {
         loadAllBooks();
         updateButtonStyles(binding.tvSelling, binding.tvSoldout);
 
+        // 초기설정
+        filterBooks(false); // 판매 중인 책 표시
+        updateButtonStyles(binding.tvSelling, binding.tvSoldout);
+
         // 태그 추가 버튼 클릭 리스너 설정
         binding.btnAddTag.setOnClickListener(new View.OnClickListener() {
             @Override
