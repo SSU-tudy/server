@@ -267,7 +267,7 @@ public class BookMainFragment extends Fragment {
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(requireContext(), BuyingActivity.class);
-                            intent.putExtra("bookInfo", currentBookInfo); // 키를 "bookInfo"로 통일
+                            intent.putExtra("BookInfo", currentBookInfo); // 키를 "bookInfo"로 통일
                             startActivity(intent);
                         }
                     });
