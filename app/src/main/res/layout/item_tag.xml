@@ -12,5 +12,5 @@
         android:layout_margin="4dp"
         android:background="@drawable/rounded_tag"
         android:textColor="@android:color/black"
-        android:textSize="14sp" />
+        android:textSize="10sp" />
 </LinearLayout>

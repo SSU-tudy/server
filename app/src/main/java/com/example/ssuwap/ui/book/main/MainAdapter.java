@@ -54,8 +54,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.CustomViewHold
         }
 
         // 제목 설정
-        holder.binding.tvBook.setText(bookInfo.getTitle());
-        Log.d("MainAdapter", "Title set for position: " + position);
+//        holder.binding.tvBook.setText(bookInfo.getTitle());
+//        Log.d("MainAdapter", "Title set for position: " + position);
 
         // 아이템 클릭 리스너 설정
         holder.itemView.setOnClickListener(v -> {

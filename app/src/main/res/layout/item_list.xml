@@ -13,13 +13,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@mipmap/ic_launcher"/>
-        <TextView
-            android:id="@+id/tv_book"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="test"
-            android:textSize="20dp"
-            android:gravity="center"
-            android:maxLength="5"/>
+<!--        <TextView-->
+<!--            android:id="@+id/tv_book"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="test"-->
+<!--            android:textSize="20dp"-->
+<!--            android:gravity="center"-->
+<!--            android:visibility="invisible"-->
+<!--            android:maxLength="5"/>-->
     </LinearLayout>
 </LinearLayout>
