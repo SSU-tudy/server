@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.ssuwap.R;
 import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.ItemSellingHistoryBinding;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -38,10 +39,8 @@ public class SellingHistoryAdaptor extends RecyclerView.Adapter<SellingHistoryAd
 
     @Override
     public void onBindViewHolder(@NonNull SellingHistoryViewHolder holder, int position) {
-        // 현재 책 데이터 가져오기
         BookInfo book = arrayList.get(position);
 
-        // 데이터 바인딩
         Glide.with(context)
                 .load(book.getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
@@ -50,27 +49,31 @@ public class SellingHistoryAdaptor extends RecyclerView.Adapter<SellingHistoryAd
         holder.binding.tvTitle.setText(book.getTitle());
         holder.binding.tvPrice.setText(book.getPrice());
 
-        // CheckBox 초기 상태 설정
-        holder.binding.cbIsSold.setOnCheckedChangeListener(null); // 기존 리스너 제거
-        holder.binding.cbIsSold.setChecked(book.isSold()); // CheckBox 상태 초기화
+        holder.binding.cbIsSold.setOnCheckedChangeListener(null);
+        holder.binding.cbIsSold.setChecked(book.isSold());
 
-        // CheckBox 상태 변경 리스너
         holder.binding.cbIsSold.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            //updateSoldStatus(book, isChecked);
-            book.setSold(true);
-            notifyDataSetChanged();
+            if (book.getKey() != null) {
+                updateSoldStatus(book, isChecked);
+                book.setSold(true); // 로컬 데이터 업데이트
+                notifyDataSetChanged();
+            } else {
+                Log.e("SellingHistoryAdaptor", "Book key is null. Cannot update isSold status.");
+            }
         });
     }
 
     private void updateSoldStatus(BookInfo book, boolean isSold) {
+        if (book.getKey() == null || book.getKey().isEmpty()) {
+            Log.e("SellingHistoryAdaptor", "Book key is missing. Cannot update isSold status.");
+            return;
+        }
+
         DatabaseReference bookRef = FirebaseDatabase.getInstance()
                 .getReference("BookInfo")
-                .child(book.getUploaderId()) // 업로더 ID 기준
-                .child(book.getTitle()); // 책 고유 제목 기준 (필요하면 고유 ID로 변경 가능)
+                .child(book.getKey()); // Firebase 고유 키 사용
 
-        // Firebase에서 isSold 상태 업데이트
         bookRef.child("isSold").setValue(isSold).addOnSuccessListener(aVoid -> {
-            book.setSold(true); // 로컬 데이터 업데이트
             Log.d("SellingHistoryAdaptor", "판매 상태 업데이트 완료: " + isSold);
         }).addOnFailureListener(e -> {
             Log.e("SellingHistoryAdaptor", "판매 상태 업데이트 실패", e);

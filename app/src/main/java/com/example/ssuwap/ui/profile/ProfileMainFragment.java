@@ -98,6 +98,10 @@ public class ProfileMainFragment extends Fragment {
 
     // 유저 정보 설정
     private void setupUserProfile() {
+        if (!isAdded()) {
+            Log.w("ProfileMainFragment", "Fragment not attached. Skipping RecyclerView update.");
+            return;
+        }
         userRef.get().addOnSuccessListener(snapshot -> {
             currentUser = snapshot.getValue(UserAccount.class);
             if (currentUser != null) {
@@ -108,10 +112,13 @@ public class ProfileMainFragment extends Fragment {
                     Glide.with(requireContext()).load(currentUser.getImageUrl()).into(binding.ivProfilePicture);
                 }
             }
-        }).addOnFailureListener(e ->
-                Toast.makeText(getContext(), "사용자 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show());
+        });
     }
     private void setupEditProfileButton() {
+        if (!isAdded()) {
+            Log.w("ProfileMainFragment", "Fragment not attached. Skipping RecyclerView update.");
+            return;
+        }
         // Firebase 사용자 인증 확인
         userRef.get().addOnSuccessListener(snapshot -> {
             // UserAccount 객체로 데이터 변환
@@ -136,7 +143,7 @@ public class ProfileMainFragment extends Fragment {
             }
         }).addOnFailureListener(e -> {
             // Firebase 데이터 가져오기 실패 처리
-            Toast.makeText(requireContext(), "사용자 정보를 가져오는 데 실패했습니다: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(requireContext(), "사용자 정보를 가져오는 데 실패했습니다: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
         binding.btnEditProfile.setOnClickListener(v -> {
             if (currentUser == null) return;
@@ -158,6 +165,10 @@ public class ProfileMainFragment extends Fragment {
         });
     }
     private void editProfileImage() {
+        if (!isAdded()) {
+            Log.w("ProfileMainFragment", "Fragment not attached. Skipping RecyclerView update.");
+            return;
+        }
         binding.ivProfilePicture.setOnClickListener(v -> {
             PhotoUploadBottomSheet photoUploadBottomSheet = new PhotoUploadBottomSheet();
             photoUploadBottomSheet.setOnPhotoUploadedListener(photoUri -> {
@@ -168,6 +179,11 @@ public class ProfileMainFragment extends Fragment {
         });
     }
     private void setupUserProfileImage(){
+        if (!isAdded()) {
+            Log.w("ProfileMainFragment", "Fragment not attached. Skipping RecyclerView update.");
+            return;
+        }
+
         // Firebase 참조 설정
         DatabaseReference userRef = FirebaseDatabase.getInstance()
                 .getReference("UserInfo")
@@ -187,15 +203,15 @@ public class ProfileMainFragment extends Fragment {
                             .into(binding.ivProfilePicture);
                 } else {
                     Log.w("Profile", "Image URL is null or empty.");
-                    Toast.makeText(requireContext(), "프로필 이미지가 없습니다.", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "프로필 이미지가 없습니다.", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Log.w("Profile", "No data found for the user.");
-                Toast.makeText(requireContext(), "사용자 정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(requireContext(), "사용자 정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(e -> {
             Log.e("Profile", "Failed to load user data.", e);
-            Toast.makeText(requireContext(), "사용자 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(requireContext(), "사용자 정보를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -209,8 +225,11 @@ public class ProfileMainFragment extends Fragment {
         tagHistoryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!isAdded() || getView() == null) {
+                    Log.w("ProfileMainFragment", "Fragment not attached. Skipping update.");
+                    return; // Fragment가 context에 연결되지 않았으면 작업 중단
+                }
                 List<String> tags = new ArrayList<>();
-
                 // Load department tags
                 if (snapshot.child("department").exists()) {
                     for (DataSnapshot deptSnapshot : snapshot.child("department").getChildren()) {
@@ -380,35 +399,36 @@ public class ProfileMainFragment extends Fragment {
 
     // DB에서 가져오기
     private void loadSubjects() {
-        // 학년_학기 키 설정
         String gradeSemesterKey = selectedGrade + "_" + selectedSemester;
 
-        // Firebase 참조 경로에서 데이터 가져오기
         subjectRef.child(gradeSemesterKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // 기존 데이터 초기화
+                if (!isAdded() || getView() == null) {
+                    Log.w("ProfileMainFragment", "Fragment not attached. Skipping update.");
+                    return; // Fragment가 context에 연결되지 않았으면 작업 중단
+                }
+
                 subjectList.clear();
                 binding.timetableContainer.removeAllViews();
 
-                // 헤더와 기본 시간표 초기화
+                // 타임테이블 초기화
                 initTimetableHeaders();
                 initTimetable();
 
-                // Firebase에서 과목 데이터를 읽어와 리스트에 추가 및 시간표에 표시
                 for (DataSnapshot subjectSnapshot : snapshot.getChildren()) {
                     Subject subject = subjectSnapshot.getValue(Subject.class);
                     if (subject != null) {
                         subjectList.add(subject);
-                        addSubjectToTimetable(subject); // 과목 데이터 추가
+                        addSubjectToTimetable(subject); // UI 업데이트
                     }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // 에러 처리
-                Toast.makeText(getContext(), "시간표 데이터를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show();
+                if (!isAdded()) return; // Fragment가 연결되지 않았으면 에러 처리 생략
+                Log.e("ProfileMainFragment", "Failed to load subjects: " + error.getMessage());
             }
         });
     }

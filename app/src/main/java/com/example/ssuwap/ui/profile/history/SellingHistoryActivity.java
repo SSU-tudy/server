@@ -1,5 +1,7 @@
 package com.example.ssuwap.ui.profile.history;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class SellingHistoryActivity extends AppCompatActivity {
+    private ValueEventListener valueEventListener;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
 
     private RecyclerView sellingRecyclerView;
     private SellingHistoryAdaptor sellingHistoryAdaptor;
@@ -45,6 +50,7 @@ public class SellingHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_selling_history);
 
         Log.d("zz", FirebaseAuth.getInstance().getCurrentUser().getUid());
+
         // Firebase 초기화
         bookRef = FirebaseDatabase.getInstance().getReference("BookInfo");
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid(); // 현재 사용자 ID 가져오기
@@ -91,10 +97,16 @@ public class SellingHistoryActivity extends AppCompatActivity {
         myBooksQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (isFinishing() || isDestroyed()) {
+                    Log.w("SellingHistoryActivity", "Activity is finishing or destroyed. Skipping update.");
+                    return; // Activity가 종료되었거나 파괴된 경우 UI 작업 생략
+                }
                 bookList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     BookInfo book = dataSnapshot.getValue(BookInfo.class);
                     if (book != null) {
+                        book.setKey(dataSnapshot.getKey()); // 고유 키 설정
+                        Log.d("pppp", dataSnapshot.getKey());
                         bookList.add(book);
                     }
                 }
@@ -104,8 +116,7 @@ public class SellingHistoryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // 에러 처리
-                // Log.d("SellingHistoryActivity", "Database error: " + error.getMessage());
+                Log.e("SellingHistoryActivity", "Failed to load books: " + error.getMessage());
             }
         });
     }
@@ -119,5 +130,21 @@ public class SellingHistoryActivity extends AppCompatActivity {
             }
         }
         sellingHistoryAdaptor.notifyDataSetChanged(); // RecyclerView 갱신
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (databaseReference != null && valueEventListener != null) {
+            databaseReference.addValueEventListener(valueEventListener);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (databaseReference != null && valueEventListener != null) {
+            databaseReference.removeEventListener(valueEventListener);
+        }
     }
 }
