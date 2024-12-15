@@ -18,18 +18,21 @@ import com.example.ssuwap.data.book.BookInfo;
 import com.example.ssuwap.databinding.ActivityUploadBookFormatBinding;
 import com.example.ssuwap.ui.book.buying.chat.ChatActivity;
 import com.example.ssuwap.ui.book.upload.isbn.NaverBookInfoFetcher;
+import com.example.ssuwap.ui.book.upload.isbn.TagSelectFragment;
 import com.example.ssuwap.ui.book.upload.isbn.UploadBookScan;
+import com.example.ssuwap.ui.post.uploadpost.TagDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-public class UploadBookFormat extends AppCompatActivity {
+public class UploadBookFormat extends AppCompatActivity implements TagSelectFragment.TagDialogListener {
 
     private static final String TAG = "UploadBookFormat";
 
@@ -91,6 +94,11 @@ public class UploadBookFormat extends AppCompatActivity {
 
         getUserInfroForFirebase();
 
+        binding.selectGrades.setVisibility(View.VISIBLE);
+        binding.selectTerm.setVisibility(View.GONE);
+        binding.selectSubject.setVisibility(View.GONE);
+
+
         if(binding == null) Log.d("UploadBookFormat", "binding fail");
         Log.d("UploadBookFormat", "binding check");
         binding.scanBookButton.setOnClickListener(new View.OnClickListener() {
@@ -103,28 +111,13 @@ public class UploadBookFormat extends AppCompatActivity {
             }
         });
 
-        binding.selectGrades.setOnClickListener(view -> {
-            gradesDialog = new AlertDialog.Builder(this)
-                    .setTitle("학년을 선택하세요.")
-                    .setSingleChoiceItems(R.array.grades, 0, dialogListener)
-                    .create();
-            gradesDialog.show();
-        });
-
-        binding.selectTerm.setOnClickListener(view -> {
-            termsDialog = new AlertDialog.Builder(this)
-                    .setTitle("학기를 선택하세요.")
-                    .setSingleChoiceItems(R.array.term, 0, dialogListener)
-                    .create();
-            termsDialog.show();
-        });
-
-        binding.selectSubject.setOnClickListener(view -> {
-            subjectDialog = new AlertDialog.Builder(this)
-                    .setTitle("과목을 선택하세요.")
-                    .setSingleChoiceItems(R.array.subject, 0, dialogListener)
-                    .create();
-            subjectDialog.show();
+        binding.selectGrades.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick()+"+TAG);
+                TagSelectFragment dialog = TagSelectFragment.newInstance("p1", "p2");
+                dialog.show(getSupportFragmentManager(), "TagDialog");
+            }
         });
 
         binding.uploadBookButton.setEnabled(false);
@@ -203,5 +196,17 @@ public class UploadBookFormat extends AppCompatActivity {
                 }
             });
         }
+    }
+
+
+    @Override
+    public void onTagSelected(String grade, String semester, String subject) {
+        binding.selectGrades.setVisibility(View.VISIBLE);
+        binding.selectTerm.setVisibility(View.VISIBLE);
+        binding.selectSubject.setVisibility(View.VISIBLE);
+
+        binding.selectGrades.setText(grade);
+        binding.selectTerm.setText(semester);
+        binding.selectSubject.setText(subject);
     }
 }
